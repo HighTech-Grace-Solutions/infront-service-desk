@@ -1,0 +1,719 @@
+{% extends "report_base.html" %}
+{% load static %}
+{% load comments comments_xtd %}
+{% block report_content %}
+
+<!-- ------------------------------- Buttons ------------------------------- -->
+<div class="row" style="padding-bottom: 20px;">
+
+	<!-- ------------------------ Left-side buttons set ------------------------ -->
+	<div class="col-sm-6">
+		<div class="buttons-set1-container">
+			<div><button type="button" data-toggle="modal" data-target="#save-changes" id="save-button"
+					class="btn btn-light"><i class="fas fa-save"></i> Save</button>
+			</div>
+			<div><button type="button" id="cancel-button" class="btn btn-light" onClick="window.location.reload();"><i
+						class="fas fa-times"></i>
+					Cancel</button></div>
+			<div><button type="button" class="btn btn-light"><i class="fas fa-wrench"></i> Resolve Incident</button>
+			</div>
+			<div><button type="button" class="btn btn-light"><i class="fas fa-book-medical"></i> Create KB
+					Article</button></div>
+			<div><button type="button" class="btn btn-light"><i class="fas fa-file-export"></i> Export</button></div>
+		</div>
+	</div>
+
+	<!-- ----------------------- Right-side buttons set ------------------------ -->
+	<div class="col-sm-6">
+		<!-- <div class="buttons-set2-container">
+			<div><button type="button" id="save-button" class="btn btn-light"><i class="fas fa-save"></i> Save</button>
+			</div>
+			<div><button type="button" id="cancel-button" class="btn btn-light"><i class="fas fa-times"></i>
+					Cancel</button></div>
+			<div><button type="button" class="btn btn-light"><i class="fas fa-wrench"></i> Resolve Incident</button>
+			</div>
+		</div> -->
+	</div>
+</div>
+
+
+<div class="row">
+
+	<div class="col-sm-6">
+		<p class="section-label"><span><b>DETAILS</b></span></p>
+
+		{% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+		<!-- ------------------------ ADMIN/TECHNICIAN VIEW ------------------------ -->
+		<form id="ticket-update" method="POST" action={% url 'ticket_update' %}>
+
+			{% csrf_token %}
+			<input type="hidden" id="ticket_id" name="ticket_id" value="{{ report.ticket_id }}">
+			<!-- <div class="sub-container"></div> -->
+
+			<!-- --------------------------- DETAILS ROW #1 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ----------------------------- REPORTED BY ----------------------------- -->
+				<div id="reported-by" class="section">
+					<p class="details-label">Reported by:</p>
+
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle; padding-left: 0;">
+						<img src="{% static "img/test.jpg" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">
+						{{ report.name }}
+					</a>
+
+				</div>
+
+				<!-- ------------------------- SUPPORT GROUP (OLD) ------------------------- -->
+
+				<!-- <div id="support-group" class="section">
+				<p class="details-label">Support Group:</p>
+
+				<li class="nav-item dropdown" style="list-style-type: none; padding-top: 5px;">
+					<a class="dropdown-toggle" id="sg-header" href="#" data-toggle="dropdown"
+						style="text-decoration: none;">
+						<i class="fa fa-folder fa-2x" style="vertical-align:middle; color: blue"></i>&nbsp;
+						Applications</a>
+
+					<ul class="dropdown-menu" id="sg-filter"> -->
+
+				<!-- <div class="input-group input-group-sm" style="padding: 0 10px 5px 10px;">
+							<input type="text" class="form-control" placeholder="Search filter"
+								id="filter-dropdown-search" onkeyup="filterFunction()">
+						</div> -->
+
+				<!-- <li><a class="dropdown-item" id="SG1" href="#"><i class="fa fa-folder fa-2x"
+									style="vertical-align:middle; color: red"></i>&nbsp; Infrastructure</a></li>
+
+						<li><a class="dropdown-item"><i class="fa fa-folder fa-2x"
+									style="vertical-align:middle; color: pink"></i>&nbsp; Applications &raquo </a>
+
+							<ul class="submenu dropdown-menu">
+								<li><a class="dropdown-item" id="SG2.1" href="#"><i class="fa fa-folder fa-2x"
+											style="vertical-align:middle; color: purple"></i>&nbsp; Server</a></li>
+								<li><a class="dropdown-item">Submenu item 3 &raquo </a>
+
+									<ul class="submenu dropdown-menu">
+										<li><a class="dropdown-item" id="SG2.1.1" href="#"><i class="fa fa-folder fa-2x"
+													style="vertical-align:middle; color: green"></i>&nbsp; Cloud
+												Services</a></li>
+										<li><a class="dropdown-item" href="">Multi level 1</a></li>
+										<li><a class="dropdown-item" href="">Multi level 2</a></li>
+									</ul>
+
+								</li>
+								<li><a class="dropdown-item" href="">Submenu item 4</a></li>
+								<li><a class="dropdown-item" href="">Submenu item 5</a></li>
+							</ul>
+
+						</li>
+						<li><a class="dropdown-item" href="#"> Dropdown item 3 </a></li>
+						<li><a class="dropdown-item" href="#"> Dropdown item 4 </a>
+					</ul>
+				</li>
+			</div> -->
+
+				<!-- <div id="support-group" class="section">
+				<label for="inputSupportGroup">Support Group<span style="color: red">&nbsp;*</span></label><br>
+
+				<select id="inputSupportGroup" name="inputSupportGroup" class="selectpicker form-control"
+					data-live-search="true" required>
+					<option style="display: none;" selected value="">Not set</option>
+					<option value="SG1">Support Group 1</option>
+					<option value="SG2">Support Group 2</option>
+					<option value="SG3">Support Group 3</option>
+				</select>
+
+			</div> -->
+
+				<!-- ------------------------- SUPPORT GROUP (NEW) ------------------------- -->
+				<div id="support-group" class="section">
+					<p class="details-label">Support Group:</p>
+
+					<select id="inputSupportGroup" name="inputSupportGroup" class="selectpicker form-control"
+						data-live-search="true" required>
+						<!-- <option selected type="{{ report.support_group }}" value="{{ report.support_group }}">
+						{{ report.support_group }}</option> -->
+
+						{% for sg in support_group %}
+						{% if sg.name == report.support_group %}
+						<option selected type="{{ report.support_group }}" value="{{ report.support_group }}">
+							{{ report.support_group }}</option>
+						{% else %}
+						<option type="{{ sg.name }}" value="{{ sg.name }}">
+							{{ sg.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+
+				</div>
+
+				<!-- ----------------------------- ASSIGNED TO ----------------------------- -->
+				<div id="assigned-to" class="section">
+					<p class="details-label">Assigned To:</p>
+
+					<fieldset id="assignee">
+						<select id="inputAssignee" name="inputAssignee" class="selectpicker form-control"
+							data-live-search="true" required>
+
+							<!-- <option selected type="{{ report.support_group }}" value=" {{ report.assigned_to }}">
+							{{ report.assigned_to }}</option> -->
+
+							<!-- <option style=" display: none;" selected value="">Not set</option> -->
+							<!-- <option type="Support Group 1" value="Muhd Rahiman">Muhd Rahiman</option>
+						<option type="Support Group 1" value="Tan Jor Seng">Tan Jor Seng</option>
+						<option type="Support Group 2" value="Luqman Nur">Luqman Nur</option>
+						<option type="Support Group 2" value="Jason Chao">Jason Chao</option>
+						<option type="Support Group 3" value="Edryana Nadhirah">Edryana Nadhirah</option>
+						<option type="Support Group 3" value="Ong Hong Teck">Ong Hong Teck</option> -->
+
+							{% for tech in technician_obj %}
+							{% if tech.name == report.assigned_to %}
+							<option selected type="{{ report.support_group }}" value="{{ report.assigned_to }}">
+								{{ report.assigned_to }}</option>
+							{% else %}
+							<option type="{{ tech.support_group }}" value="{{ tech.name }}">
+								{{ tech.name }}</option>
+							{% endif %}
+							{% endfor %}
+
+						</select>
+					</fieldset>
+				</div>
+			</div>
+
+			<!-- --------------------------- DETAILS ROW #2 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ------------------------------ CATEGORY ------------------------------- -->
+				<div id="category" class="section">
+					<p class="details-label">Category:</p>
+
+					<select id="inputCategory" name="inputCategory" class="selectpicker form-control"
+						data-live-search="true" required>
+
+						{% for cat in category %}
+						{% if cat.name == report.category %}
+						<option selected type="{{ report.category }}" value="{{ report.category }}">
+							{{ report.category }}</option>
+						{% else %}
+						<option type="{{ cat.name }}" value="{{ cat.name }}">
+							{{ cat.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- ---------------------------- SUB-CATEGORY ----------------------------- -->
+				<div id="sub-category" class="section">
+					<p class="details-label">Sub-category:</p>
+					<fieldset id="subcategory">
+						<select id="inputSubcategory" name="inputSubcategory" class="selectpicker form-control"
+							data-live-search="true" required>
+
+							{% for subcat in sub_category %}
+							{% if subcat.name == report.sub_category %}
+							<option selected type="{{ report.category }}" value="{{ report.sub_category }}">
+								{{ report.sub_category }}</option>
+							{% else %}
+							<option type="{{ report.sub_category }}" value="{{ subcat.name }}">
+								{{ subcat.name }}</option>
+							{% endif %}
+							{% endfor %}
+
+						</select>
+					</fieldset>
+				</div>
+
+				<!-- ------------------------------- SOURCE -------------------------------- -->
+				<div id="source" class="section">
+					<p class="details-label">Source:</p>
+					<select class="selectpicker form-control">
+						<!-- <option selected value="Service Desk">Service Desk</option>
+						<option>Email</option>
+						<option>Phone Call</option> -->
+
+						{% for source in source %}
+						{% if source.name == 'Service Desk' %}
+						<option selected value="{{ source.name }}">{{ source.name }}</option>
+						{% else %}
+						<option value="{{ source.name }}">{{ source.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+
+				</div>
+			</div>
+
+			<!-- --------------------------- DETAILS ROW #4 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ------------------------------- IMPACT -------------------------------- -->
+				<div id="impact" class="section">
+					<p class="details-label">Impact:</p>
+					<select id="inputImpact" name="inputImpact" class="selectpicker form-control"
+						style="max-width: 10% !important;" data-live-search="true" required>
+
+						{% for impact in impact %}
+						{% if impact.impact == report.impact %}
+						<option selected value="{{ report.impact }}">{{ report.impact }}</option>
+						{% else %}
+						<option value="{{ impact.impact }}">{{ impact.impact }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- ------------------------------- URGENCY ------------------------------- -->
+				<div id="urgency" class="section">
+					<p class="details-label">Urgency:</p>
+					<select id="inputUrgency" name="inputUrgency" class="selectpicker form-control"
+						data-live-search="true" required>
+
+						{% for urgency in urgency %}
+						{% if urgency.urgency == report.urgency %}
+						<option selected value="{{ report.urgency }}">{{ report.urgency }}</option>
+						{% else %}
+						<option value="{{ urgency.urgency }}">{{ urgency.urgency }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group section">
+					<p class="details-label">Priority:</p>
+					<p id="priority"></p>
+				</div>
+			</div>
+
+			<!-- ----------------------------- DESCRIPTION ----------------------------- -->
+			<!-- <div class="sub-container">
+			</div> -->
+			<div class="details-container">
+				<p class="section-label"><span><b>DESCRIPTION</b></span></p>
+				<div class="form-group" style="width: 100%;">
+					<textarea id="summernote" rows="7" name="editordata" placeholder="Description of incident"
+						required>{{ report.description }}</textarea>
+					<div class="invalid-feedback">Please enter a description of the incident</div>
+				</div>
+			</div>
+
+			<!-- ----------------------------- ATTACHMENTS ----------------------------- -->
+			<!-- <div class="sub-container">
+				<p class="section-label"><span><b>ATTACHMENTS</b></span></p>
+				<div class="details-container"> -->
+			<!-- <div class="form-group">
+						<input type="file" class="form-control-file" id="exampleFormControlFile1">
+					</div> -->
+			<!-- <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
+				</div>
+			</div> -->
+			<p class="section-label"><span><b>ATTACHMENTS</b></span></p>
+
+			<input type="file" class="filepond">
+		</form>
+		{% else %}
+		<!-- ------------------------------ USER VIEW ------------------------------ -->
+		<form id="ticket-update" method="POST" action={% url 'ticket_update' %}>
+
+			{% csrf_token %}
+			<input type="hidden" id="ticket_id" name="ticket_id" value="{{ report.ticket_id }}">
+			<!-- <div class="sub-container"></div> -->
+
+			<!-- --------------------------- DETAILS ROW #1 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ----------------------------- REPORTED BY ----------------------------- -->
+				<div id="reported-by" class="section">
+					<p class="details-label">Reported by:</p>
+
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle; padding-left: 0;">
+						<img src="{% static "img/test.jpg" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">
+						{{ report.name }}
+					</a>
+
+				</div>
+
+				<!-- ------------------------- SUPPORT GROUP (NEW) ------------------------- -->
+				<div id="support-group" class="section">
+					<p class="details-label">Support Group:</p>
+
+					<select id="inputSupportGroup" name="inputSupportGroup" class="selectpicker form-control"
+						data-live-search="true" disabled required>
+						<!-- <option selected type="{{ report.support_group }}" value="{{ report.support_group }}">
+						{{ report.support_group }}</option> -->
+
+						{% for sg in support_group %}
+						{% if sg.name == report.support_group %}
+						<option selected type="{{ report.support_group }}" value="{{ report.support_group }}">
+							{{ report.support_group }}</option>
+						{% else %}
+						<option type="{{ sg.name }}" value="{{ sg.name }}">
+							{{ sg.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+
+				</div>
+
+				<!-- ----------------------------- ASSIGNED TO ----------------------------- -->
+				<div id="assigned-to" class="section">
+					<p class="details-label">Assigned To:</p>
+
+					<fieldset id="assignee">
+						<select id="inputAssignee" name="inputAssignee" class="selectpicker form-control"
+							data-live-search="true" disabled required>
+
+							{% for tech in technician_obj %}
+							{% if tech.name == report.assigned_to %}
+							<option selected type="{{ report.support_group }}" value="{{ report.assigned_to }}">
+								{{ report.assigned_to }}</option>
+							{% else %}
+							<option type="{{ tech.support_group }}" value="{{ tech.name }}">
+								{{ tech.name }}</option>
+							{% endif %}
+							{% endfor %}
+
+						</select>
+					</fieldset>
+				</div>
+			</div>
+
+			<!-- --------------------------- DETAILS ROW #2 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ------------------------------ CATEGORY ------------------------------- -->
+				<div id="category" class="section">
+					<p class="details-label">Category:</p>
+
+					<select id="inputCategory" name="inputCategory" class="selectpicker form-control"
+						data-live-search="true" disabled required>
+
+						{% for cat in category %}
+						{% if cat.name == report.category %}
+						<option selected type="{{ report.category }}" value="{{ report.category }}">
+							{{ report.category }}</option>
+						{% else %}
+						<option type="{{ cat.name }}" value="{{ cat.name }}">
+							{{ cat.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- ---------------------------- SUB-CATEGORY ----------------------------- -->
+				<div id="sub-category" class="section">
+					<p class="details-label">Sub-category:</p>
+					<fieldset id="subcategory">
+						<select id="inputSubcategory" name="inputSubcategory" class="selectpicker form-control"
+							data-live-search="true" disabled required>
+
+							{% for subcat in sub_category %}
+							{% if subcat.name == report.sub_category %}
+							<option selected type="{{ report.category }}" value="{{ report.sub_category }}">
+								{{ report.sub_category }}</option>
+							{% else %}
+							<option type="{{ report.sub_category }}" value="{{ subcat.name }}">
+								{{ subcat.name }}</option>
+							{% endif %}
+							{% endfor %}
+
+						</select>
+					</fieldset>
+				</div>
+
+				<!-- ------------------------------- SOURCE -------------------------------- -->
+				<div id="source" class="section">
+					<p class="details-label">Source:</p>
+					<select class="selectpicker form-control" disabled>
+						<!-- <option selected value="Service Desk">Service Desk</option>
+						<option>Email</option>
+						<option>Phone Call</option> -->
+
+						{% for source in source %}
+						{% if source.name == 'Service Desk' %}
+						<option selected value="{{ source.name }}">{{ source.name }}</option>
+						{% else %}
+						<option value="{{ source.name }}">{{ source.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+
+				</div>
+			</div>
+
+			<!-- --------------------------- DETAILS ROW #4 ---------------------------- -->
+			<div class="details-container">
+
+				<!-- ------------------------------- IMPACT -------------------------------- -->
+				<div id="impact" class="section">
+					<p class="details-label">Impact:</p>
+					<select id="inputImpact" name="inputImpact" class="selectpicker form-control"
+						style="max-width: 10% !important;" data-live-search="true" disabled required>
+
+						{% for impact in impact %}
+						{% if impact.impact == report.impact %}
+						<option selected value="{{ report.impact }}">{{ report.impact }}</option>
+						{% else %}
+						<option value="{{ impact.impact }}">{{ impact.impact }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- ------------------------------- URGENCY ------------------------------- -->
+				<div id="urgency" class="section">
+					<p class="details-label">Urgency:</p>
+					<select id="inputUrgency" name="inputUrgency" class="selectpicker form-control"
+						data-live-search="true" disabled required>
+
+						{% for urgency in urgency %}
+						{% if urgency.urgency == report.urgency %}
+						<option selected value="{{ report.urgency }}">{{ report.urgency }}</option>
+						{% else %}
+						<option value="{{ urgency.urgency }}">{{ urgency.urgency }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<div class="form-group section">
+					<p class="details-label">Priority:</p>
+					<p id="priority"></p>
+				</div>
+			</div>
+
+			<!-- ----------------------------- DESCRIPTION ----------------------------- -->
+			<!-- <div class="sub-container">
+			</div> -->
+			<div class="details-container">
+				<p class="section-label"><span><b>DESCRIPTION</b></span></p>
+				<div class="form-group" style="width: 100%;">
+					<textarea id="summernote" rows="7" name="editordata" placeholder="Description of incident"
+						required>{{ report.description }}</textarea>
+					<script>
+						$('#summernote').summernote({
+							airMode: true,
+						});
+
+						$('#summernote').summernote('disable');
+					</script>
+					<div class="invalid-feedback">Please enter a description of the incident</div>
+				</div>
+			</div>
+
+			<!-- ----------------------------- ATTACHMENTS ----------------------------- -->
+			<!-- <div class="sub-container">
+				<p class="section-label"><span><b>ATTACHMENTS</b></span></p>
+				<div class="details-container"> -->
+			<!-- <div class="form-group">
+						<input type="file" class="form-control-file" id="exampleFormControlFile1">
+					</div> -->
+			<!-- <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
+				</div>
+			</div> -->
+			<p class="section-label"><span><b>ATTACHMENTS</b></span></p>
+
+			<input type="file" class="filepond">
+		</form>
+		{% endif %}
+
+	</div>
+	<!-- <div class="col-sm-0.5"></div> -->
+	<div class="col-sm-6">
+		<p class="section-label"><span><b>COMMENTS</b></span></p>
+
+		<div class="container-fluid mt-4 comment-form">
+			{% render_comment_form for report %}
+		</div>
+
+		{% get_comment_count for report as comment_count %}
+		{% if comment_count %}
+		<hr>
+		<div class="container-fluid mt-4 media-list">
+			{% render_xtdcomment_tree for report %}
+		</div>
+		{% endif %}
+
+	</div>
+</div>
+
+
+<!-- Changes Confirmation Modal -->
+<div class="modal" id="save-changes" tabindex="-1" role="dialog" aria-labelledby="save-changes" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalCenteredLabel">Save changes</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to save the changes made to the ticket?
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="submit" form="ticket-update" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	// Get FRT and RT from SLATable model
+	const sla_FRT = parseInt("{{ sla.FRT1|safe }}");
+	const sla_RT = parseInt("{{ sla.RT1|safe }}");
+	const ticket_date_created = "{{ report.date_created|safe }}";
+	const ticket_state = "{{ report.state|safe }}";
+
+	// <!-- ----------------- Calculate SLA Resolution Countdown ------------------ -->
+	$(function () {
+		// set the date we're counting down to
+		var target_date = moment(ticket_date_created).add(sla_FRT, 'm').toDate()
+
+		// variables for time units
+		var days, hours, minutes, seconds;
+
+		// get tag element
+		var countdown = document.getElementById('countdown-sla-response');
+
+		// update the tag with id "countdown" every 1 second
+		setInterval(function () {
+
+			// find the amount of "seconds" between now and target
+			var current_date = new Date().getTime();
+
+			var seconds_left = (target_date - current_date) / 1000;
+
+			hours = parseInt(seconds_left / 3600, 10);
+			var hours_str, mins_str, secs_str = "";
+			seconds_left = seconds_left % 3600;
+
+			minutes = parseInt(seconds_left / 60, 10);
+			seconds = parseInt(seconds_left % 60, 10);
+
+			if (current_date >= target_date) {
+				hours_str = "00";
+				mins_str = "00";
+				secs_str = "00";
+
+				if (ticket_state == "Open")
+					countdown.innerHTML =
+					'<span class="badge badge-warning"><b style="font-size: 17px;">SLA Breached</b><span>';
+				else
+					countdown.innerHTML =
+					'<span class="badge badge-success"><b style="font-size: 17px;">SLA Met</b><span>';
+
+				// countdown.innerHTML = '<strong style="font-size: 24px;"><span class="hours">' +
+				// 	hours_str + '<label>:</label></span><span class="minutes">' +
+				// 	mins_str + '<label>:</label></span><span class="seconds">' + secs_str +
+				// 	'<label></label></span></strong>';
+			} else {
+				if (hours < 10)
+					hours_str = "0" + hours;
+				else
+					hours_str = hours;
+
+				if (minutes < 10)
+					mins_str = "0" + minutes;
+				else
+					mins_str = minutes;
+
+				if (seconds < 10)
+					secs_str = "0" + seconds;
+				else
+					secs_str = seconds;
+
+				// format countdown string + set tag value
+				countdown.innerHTML =
+					'<span class="badge badge-danger"><strong style="font-size: 24px;"><span class="hours">' +
+					hours_str + '<label>:</label></span><span class="minutes">' +
+					mins_str + '<label>:</label></span><span class="seconds">' + secs_str +
+					'<label></label></span></strong><span>';
+			}
+
+			// countdown.innerHTML = '<strong style="font-size: 24px;"><span class="hours">' + hours_str +
+			//     '<label>:</label></span><span class="minutes">' +
+			//     mins_str + '<label></label></span></strong>';
+
+		}, 1000);
+	});
+
+	// <!-- ----------------- Calculate SLA Resolution Countdown ------------------ -->
+
+	$(function () {
+		// set the date we're counting down to
+		var target_date = new Date(moment(ticket_date_created).add(sla_RT, 'h').toDate()).getTime();
+
+		// variables for time units
+		var days, hours, minutes, seconds;
+
+		// get tag element
+		var countdown = document.getElementById('countdown-sla-resolution');
+
+		// update the tag with id "countdown" every 1 second
+		setInterval(function () {
+
+			// find the amount of "seconds" between now and target
+			var current_date = new Date().getTime();
+
+			var seconds_left = (target_date - current_date) / 1000;
+
+			//     days = parseInt(seconds_left / 86400);
+			//     seconds_left = seconds_left % 86400;
+
+			hours = parseInt(seconds_left / 3600, 10);
+			var hours_str, mins_str, secs_str = "";
+			seconds_left = seconds_left % 3600;
+
+			minutes = parseInt(seconds_left / 60, 10);
+			seconds = parseInt(seconds_left % 60, 10);
+
+			if (current_date >= target_date) {
+				hours_str = "00";
+				mins_str = "00";
+				secs_str = "00";
+
+				// format countdown string + set tag value
+				countdown.innerHTML =
+					'<span class="badge badge-danger"><strong style="font-size: 24px;"><span class="hours">' +
+					hours_str + '<label>:</label></span><span class="minutes">' +
+					mins_str + '<label>:</label></span><span class="seconds">' + secs_str +
+					'<label></label></span></strong><span>';
+			} else {
+				if (hours < 10)
+					hours_str = "0" + hours;
+				else
+					hours_str = hours;
+
+				if (minutes < 10)
+					mins_str = "0" + minutes;
+				else
+					mins_str = minutes;
+
+				if (seconds < 10)
+					secs_str = "0" + seconds;
+				else
+					secs_str = seconds;
+
+				// format countdown string + set tag value
+				countdown.innerHTML =
+					'<span class="badge badge-danger"><strong style="font-size: 24px;"><span class="hours">' +
+					hours_str + '<label>:</label></span><span class="minutes">' +
+					mins_str + '<label>:</label></span><span class="seconds">' + secs_str +
+					'<label></label></span></strong><span>';
+			}
+
+			// countdown.innerHTML = '<strong style="font-size: 24px;"><span class="hours">' + hours_str +
+			//     '<label>:</label></span><span class="minutes">' +
+			//     mins_str + '<label></label></span></strong>';
+
+		}, 1000);
+	});
+	// FilePond.parse(document.body);
+</script>
+{% endblock %}
+

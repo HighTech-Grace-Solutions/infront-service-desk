@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+
+<head>
+	{% block css %}
+	<!-- Title -->
+	<title>User Settings</title>
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
+	{% endblock %}
+
+</head>
+
+<body>
+	{% block content_container %}
+
+	<!-- --------------- navigation for the user management page --------------- -->
+
+	<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" href="{% url 'users' %}">User</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'groups' %}">Group</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'companies' %}">Company</a>
+		</li>
+	</ul>
+
+	<br>
+	<div class="row">
+		<div class="col">
+			<strong style="font-size: 24px;" id="incident-header">User Management</strong>
+		</div>
+		<div class="col text-right">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#user-create-modal">Create
+				User</button>
+		</div>
+	</div>
+
+	<!-- -------------------------- User Create Modal -------------------------- -->
+	<div class="modal" id="user-create-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title">Create User</h5>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<form method='POST' action="{% url 'users' %}" id="user-create">
+					{% csrf_token %}
+					<div class="modal-body">
+
+						<div class="form-group">
+							<label>First Name<span style="color: red">&nbsp;*</span></label>
+							<input type="text" id="first_name" name="first_name" class="form-control"
+								placeholder="First Name" onkeyup="SetFullName()" required>
+						</div>
+
+						<div class="form-group">
+							<label>Last Name<span style="color: red">&nbsp;*</span></label>
+							<input type="text" id="last_name" name="last_name" class="form-control"
+								placeholder="Last Name" onkeyup="SetFullName()" required>
+						</div>
+
+						<div class="form-group">
+							<label>Full Name<span style="color: red">&nbsp;*</span></label>
+							<input type="text" id="full_name" name="full_name" class="form-control"
+								placeholder="Full Name" required>
+						</div>
+
+
+						<div class="form-group">
+							<label>Email<span style="color: red">&nbsp;*</span></label>
+							<input type="email" name="email" class="form-control" placeholder="Email" required>
+						</div>
+
+						<div class="form-group">
+							<label>Role<span style="color: red">&nbsp;*</span></label>
+							<!-- <select class="selectpicker form-control" name="role" id="role" onchange="ShowHideDiv()" required> -->
+							<select class="selectpicker form-control" name="role" id="role" required>
+								<option value="" selected style="display: none">Not set</option>
+								<option value="Admin">Admin</option>
+								<option value="Technician">Technician</option>
+								<option value="Customer">Customer</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Company<span style="color: red">&nbsp;*</span></label>
+							<select class="selectpicker form-control" name="company" data-live-search="true" required>
+								<option value="" selected style="display: none">Not set</option>
+								{% for company in company_name %}
+								<option value="{{ company.name }}">
+									{{ company.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="form-group" id="checkbox-value">
+							<input type="checkbox" name="PIC" class="inline checkbox" value="True">
+							<label class="form-check-label" for="exampleCheck1">&nbsp;Person In Charge (PIC)</label>
+						</div>
+
+						<div class="form-group">
+							<label>Password<span style="color: red">&nbsp;*</span></label>
+							<input type="password" name="password1" class="form-control" placeholder="Insert Password"
+								required>
+						</div>
+						<div class="form-group">
+							<label>Confirm Password<span style="color: red">&nbsp;*</span></label>
+							<input type="password" name="password2" class="form-control" placeholder="Confirm Password"
+								required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Create User</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<!-- ------------------------ User Management Table ------------------------ -->
+	<div>
+		<table id="user-table" class="table table-hover table-center">
+			<thead class="thead-dark">
+				<tr>
+					<th>Name</th>
+					<th>Email</th>
+					<!-- <th>First Name</th>
+					<th>Last Name</th> -->
+					<th>Role</th>
+					{% comment %} <th>Access Level</th> {% endcomment %}
+					<th>Update</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for user in user_list %}
+				<tr>
+					<td class="row-center"><img class='profileImg' src="{%static "img/img_avatar.png" %}"
+							style="size:10px">
+						&nbsp; {{ user.full_name }}
+					</td>
+					<td class="row-center">{{ user.email }}</td>
+					<!-- <td class="row-center">{{ user.first_name }}</td>
+					<td class="row-center">{{ user.last_name }}</td> -->
+					<td class="row-center">{{ user.role }}</td>
+					<td class="row-center">
+						<a id="user-update-modal-pop" class="btn btn-secondary"
+							data-url="{% url 'update_modal' user.id %}" role="button"><i
+								class="fas fa-pencil-alt"></i></a>
+					</td>
+					<td class="row-center">
+						<a id="user-delete-modal-pop" class="btn btn-secondary"
+							data-url="{% url 'delete_user_modal' user.id %}" role="button"><i
+								class="fas fa-user-times"></i></i></a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<script src="{% static "js/admin.js" %}"></script>
+	<div id="user-update-modal-container"></div>
+	<div id="user-delete-modal-container"></div>
+
+	{% endblock %}
+
+</body>

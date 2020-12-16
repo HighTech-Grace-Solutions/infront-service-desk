@@ -1,0 +1,161 @@
+h1 {
+    font-size: 24px;
+    color: #737373;
+    font-family: 'Open Sans', sans-serif;
+    padding-bottom: 100px 25px;
+}
+
+services {
+    justify-content: space-between;
+}
+
+h2 {
+    color: #737373;
+    background-size: cover;
+    font-size: 15px;
+    font: Calibri;
+    margin-bottom: 30px;
+}
+
+h3 {
+    font-size: 30px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+}
+
+h4 {
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.37em;
+    color: #737373;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+h5 {
+    color: #737373;
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.37em;
+    text-align: left;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+h6 {
+    font-size: 17px;
+    text-align: left;
+    color: #737373;
+    font: bold;
+}
+
+.jumbotron {
+    margin-top: 0%;
+    margin-bottom: 0%;
+    color: #ffffff;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    background-size: unset;
+    background: url('/static/images/landingPageBG.png') no-repeat center;
+    background-color: #ffffff;
+}
+
+.title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+}
+
+.glyphicon-exclamation-sign, .glyphicon-phone, .glyphicon-search {
+    font-size: 35px;
+    text-align: center;
+    color: white;
+}
+
+p {
+    font: bold;
+    text-align: left;
+    color: black;
+}
+
+.p {
+    font-size: 13px;
+}
+
+p1 {
+    text-align: left;
+    font-size: 10px;
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border-color: #c60063;
+    color: #c60063;
+}
+
+.w3-bar .w3-button {
+    padding: 16px;
+}
+
+.panel, .flip {
+    text-align: left;
+    font: black;
+    font-size: 15px;
+    padding: 30px;
+}
+
+.panel {
+    padding-bottom: 20px;
+    display: none;
+}
+
+.alignleft {
+    float: left;
+}
+
+.alignright {
+    float: right;
+}
+
+/*announcement*/
+
+.panel1, .flip1 {
+    text-align: left;
+    color: black;
+    font-size: 15px;
+    padding: 30px;
+}
+
+.panel1 {
+    display: none;
+    background-color: red;
+    text-align: left;
+    padding-bottom: 20px;
+}
+
+.alignleft1 {
+    float: left;
+    padding-top: 10px;
+}
+
+.alignright1 {
+    float: right;
+}
+
+/*showMoreLess*/
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}

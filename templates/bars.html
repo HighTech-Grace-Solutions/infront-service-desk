@@ -1,0 +1,166 @@
+{% load static %}
+
+<head>
+    <link rel='stylesheet' type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel='stylesheet' type="text/css" href="{% static 'css/sidebar.css' %}">
+</head>
+
+<!-- New Navbar -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+
+    <!-- <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color: black;"></i></a> -->
+
+    {% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+    <a class="navbar-brand" href="#" style="padding-left: 3%;">&nbsp; SwiftDesk</a>
+    {% else %}
+    <a class="navbar-brand" href="#">&nbsp; SwiftDesk</a>
+    {% endif %}
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={% url 'landing_page' %}>Home <span class="sr-only">(current)</span></a>
+            </li>
+            <!-- <li class="nav-item">
+                <a class="nav-link" href=>Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li> -->
+        </ul>
+        {% else %}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={% url 'landing_page' %}>Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={% url 'incident_form' %}>Request Ticket</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={% url 'incident_ticket_overview' %}>My Tickets</a>
+            </li>
+        </ul>
+        {% endif %}
+
+        <!-- <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+
+        <ul class="nav navbar-nav navbar-right ml-auto">
+            <li class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img
+                        src="{% static "img/profile_pic_placeholder.png" %}" class="avatar" alt="Avatar"
+                        style="width: 36px; height: 36px;">&nbsp;{{ request.user.username }}<b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="" class="dropdown-item"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li>
+                        <div class="text-center">
+                            <a href="{% url 'logout' %}" class="btn btn-danger" role="button">Log Out</a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- New Sidebar -->
+{% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+<nav class="main-menu">
+    <ul>
+        <li class="has-subnav">
+
+            <a href="#">
+                <img src="{% static "img/infront.png" %}" width="40" height="40" class="d-inline-block align-top"
+                    style="margin: 0 10px 10px 10px;" alt="">
+                <span class="nav-text">
+                    <b>Infront</b>
+                </span>
+            </a>
+
+        </li>
+        <li class="has-subnav">
+            <a href="{% url 'incident_form' %}">
+                <i id="sidebar-icon" class="fa fa-fw fa-file-signature"></i>
+                <span class="nav-text">
+                    Incident Form
+                </span>
+            </a>
+
+        </li>
+        <!-- <li class="has-subnav">
+            <a href="#">
+                <i id="sidebar-icon" class="fa fa-list fa-2x"></i>
+                <span class="nav-text">
+                    Forms
+                </span>
+            </a>
+        </li> -->
+        <li class="has-subnav">
+            <a href="{% url 'incident_ticket_overview' %}">
+                <i id="sidebar-icon" class="fa fa-folder-open fa-2x"></i>
+                <span class="nav-text">
+                    Incident Overview
+                </span>
+            </a>
+
+        </li>
+        <!-- <li>
+            <a href="#">
+                <i id="sidebar-icon" class="fa fa-font fa-2x"></i>
+                <span class="nav-text">
+                    Quotes
+                </span>
+            </a>
+        </li> -->
+        <li>
+            <a href="{% url 'dashboard' %}">
+                <i id="sidebar-icon" class="fas fa-tachometer-alt"></i>
+                <span class="nav-text">
+                    Dashboard
+                </span>
+            </a>
+        </li>
+        {% if request.user.role == 'Admin' %}
+        <li>
+            <a href="{% url 'users' %}">
+                <i id="sidebar-icon" class="fa fa-table fa-2x"></i>
+                <span class="nav-text">
+                    Admin Page
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'SLA' %}">
+                <i id="sidebar-icon" class="fas fa-clock"></i>
+                <span class="nav-text">
+                    SLA
+                </span>
+            </a>
+        </li>
+        {% endif %}
+
+
+    </ul>
+
+    <!-- <ul class="logout">
+        <li>
+            <a href="#">
+                <i id="sidebar-icon" class="fa fa-power-off fa-2x"></i>
+                <span class="nav-text">
+                    Logout
+                </span>
+            </a>
+        </li>
+    </ul> -->
+</nav>
+{% endif %}

@@ -1,0 +1,49 @@
+.table td {
+	vertical-align: middle;
+	border-top: none !important;
+	table-layout: fixed;
+}
+
+.input-group {
+	padding-top: 20px;
+}
+
+.td form-row {
+	padding-left: 20px;
+	padding-top: 5px;
+}
+
+.table thead th {
+	vertical-align: middle;
+	border-bottom: 2px solid #dee2e6;
+}
+
+.form {
+	padding-top: 20px;
+}
+
+.form-control1 {
+	border-radius: 5px;
+	background-color: #aaaaaa;
+	padding: 20px;
+}
+
+#delete {
+	cursor: pointer;
+}
+
+DIV.table {
+	display: table;
+}
+
+FORM.tr, DIV.tr {
+	display: table-row;
+}
+
+SPAN.td {
+	display: table-cell;
+}
+
+#sla-field-label {
+	border-radius: 0 0.25rem 0.25rem 0;
+}

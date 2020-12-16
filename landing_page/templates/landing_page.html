@@ -1,0 +1,225 @@
+{% extends "landing_page_base.html" %}
+{% load static %}
+{% block landing_page_content %}
+
+<div style="background: url('/static/img/landingPageBG.png'); border-radius:0%; padding-right:-58px;">
+
+	<h1 class="display-5 text-center" style="padding-top:5%; color:white;">How can we help you?</h1>
+	<div class="input-group mb-3" style="width:40%; margin-left:auto; margin-right:auto;padding-bottom:1%;">
+		<input type="text" name="searchBar" class="form-control" placeholder="What do you need help with?"
+			style="border-color:grey">
+		<div class="input-group-append">
+			<button class="btn btn-light btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
+		</div>
+	</div>
+
+
+	<!-- Three Cards -->
+	<div class="container" style="height:650px">
+		<div class="row justify-content-center">
+			<div class="col-lg-3">
+				<div class="card text-center">
+					<div class="card-body">
+						<h5 class="card-title text-center">
+							<i class="btn btn-danger btn-circle btn-xl">
+								<i class="fas fa-exclamation-circle" style="padding-top:13px"></i>
+							</i>
+							<div class="card-text text-center" style="padding-top:15px">
+								<h4><b>Report an Incident</b></h4>
+							</div>
+							<div class="text-center">
+								<a href="{%url 'incident_form' %}" type="button" style="color:white"
+									class="btn btn-danger btn-rounded">Report Incident</a>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="card text-center">
+					<div class="card-body">
+						<h5 class="card-title text-center">
+							<i class="btn btn-info btn-circle btn-xl">
+								<i class="fas fa-desktop" style="padding-top:13px"></i>
+							</i>
+							<div class="card-text" style="padding-top:15px">
+								<h4><b>Make a Request</b></h4>
+							<div class="text-center">
+									<a href="#" style="color: white" class="btn btn-info btn-rounded">Service
+										Request</a>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3">
+				<div class="card text-center">
+					<div class="card-body">
+						<h5 class="card-title text-center">
+							<i class="btn btn-primary btn-circle btn-xl">
+								<i class="fas fa-search" style="padding-top:13px"></i>
+							</i>
+							<div class="card-text" style="padding-top:15px">
+								<h4><b>Find an Answer</b></h4>
+								<div class="text-center">
+									<a href="#" style="color:white" class="btn btn-primary btn-rounded">Find
+										Solutions</a>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Three Cards End -->
+		<div class="container justify-content-center">
+			<div class="card-deck" style="margin-top:5%; width:100%;">
+				<div class="card">
+					<div class="card-header bg-white">
+						<h5 style="color:#737373; padding-left:20px; margin-bottom:0px">
+							<i class="fas fa-bullhorn"></i> <b>Top Announcements</b>
+						</h5>
+					</div>
+					<div class="card-body">
+						<div class="card-text">
+							<a href="#announcement" target="_blank" style="color:#3B86FF">
+								<b style="font-size:17px"> Email server down</b><i class="fas fa-arrow-right alignright"
+									style="padding-top:5px"></i> </a>
+							<h6 style="font-size:14px">Hello World!</h6>
+						</div>
+						<hr class="solid">
+						<div class="card-text" style="padding-top:5px">
+							<a href="#announcement2" target="_blank" style="color:#3B86FF">
+								<b style="font-size:17px">Insert announcement here</b><i
+									class="fas fa-arrow-right alignright" style="padding-top:5px"></i> </a>
+							<h6 style="font-size:14px">Hello World!</h6>
+						</div>
+					</div>
+				</div>
+<!-- Open Incidents -->
+				<div class="card">
+					<div class="card-header bg-white">
+						<h5 style="color:#737373;  padding-left:10px; margin-bottom:0px">
+							<i class="fas fa-folder-open"></i> <b> My Top Open Incidents</b>
+						</h5>
+					</div>
+					<div class="card-body" style="padding-bottom:0px; padding-left:10px; padding-right:0px">
+						<div class="card-text" style="padding-left:10px;">
+							<p class="alignleft"><a href="#myIncident1"
+									style="color: #3B86FF; font-size:17px;"><b>Javascript Error </b></a></p>
+							<button type="button" class="btn" data-toggle="modal" data-target="#OpenIncident1"
+								style="padding-top:0px"><i class="far fa-eye"></i></button>
+							<div class="flip1" style="padding-top:10px">
+								<p class="alignleft">###### hours ago</p>
+								<p class="alignright">YYYY-MM-DD</p>
+							</div>
+							<hr class="solid">
+
+							<p class="alignleft"><a href="#myIncident2" style="color: #3B86FF; font-size:17px"><b>Azure
+										DevOps Issue</b></a></p>
+							<button type="button" class="btn" data-toggle="modal" data-target="#OpenIncident2"
+								style="padding-top:0px"><i class="far fa-eye"></i></button>
+							<div class="flip1" style="padding-top:10px; padding-bottom:65px; ">
+								<p class="alignleft">###### hours ago</p>
+								<p class="alignright">YYYY-MM-DD</p>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer bg-white text-center">
+						<a href="{% url 'incident_ticket_overview' %}">More Reports</a>
+					</div>
+				</div>
+
+
+				<div class="card">
+					<div class="card-header bg-white">
+						<h5 style="color:#737373; font-size:20px; padding-left:25px; margin-bottom:0px">
+							<i class="fas fa-book"></i> <b> My Request Summary</b>
+						</h5>
+					</div>
+					<div class="card-body" style="padding-bottom:0px; padding-left:10px; padding-right:0px">
+						<div class="card-text" style="padding-left:10px;">
+							<h6>Pending</h6>
+							<h6><b>12</b></h6>
+							<hr class="solid">
+							<h6>Awaiting Approval</h6>
+							<h6><b>12</b></h6>
+							<hr class="solid">
+							<h6>Awaiting Updates</h6>
+							<h6><b>2</b></h6>
+						</div>
+					</div>
+					<div class="card-footer bg-white text-center">
+						<a href="#">Details</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--My Incident-->
+
+	<!-- Modals -->
+	<div class="modal fade" id="OpenIncident3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="border-radius:0px">
+					<h5 class="modal-title" id="exampleModalLongTitle">Subnet Configuration Error</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					There is something wrong with the Subnet
+					User: xxx
+					Technician: xxx
+				</div>
+				<div class="modal-footer" style="border-radius:0px">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="OpenIncident2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="border-radius:0px">
+					<h5 class="modal-title" id="exampleModalLongTitle">Subnet Configuration Error</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					There is something wrong with the Subnet
+					User: xxx
+					Technician: xxx
+				</div>
+				<div class="modal-footer" style="border-radius:0px">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="OpenIncident1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header" style="border-radius:0px">
+					<h5 class="modal-title" id="exampleModalLongTitle">Subnet Configuration Error</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					There is something wrong with the Subnet
+					User: xxx
+					Technician: xxx
+				</div>
+				<div class="modal-footer" style="border-radius:0px">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

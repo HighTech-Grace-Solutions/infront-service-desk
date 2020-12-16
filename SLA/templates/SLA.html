@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+{% load static %}
+
+<head>
+	{% block css %}
+	<!-- Title -->
+	<title>SLA</title>
+
+	<!-- Custom CSS -->
+	<link href="{% static 'css/SLA.css'%}" rel="stylesheet" media="screen" />
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+	{% endblock %}
+
+	{% block js %}
+	<!-- Select2 JS -->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+	{% endblock %}
+
+</head>
+
+<body>
+	{% block content_container %}
+	<div class="row">
+		<div class="col">
+			<strong style="font-size: 24px;" id="incident-header">SLA Configuration</strong>
+		</div>
+		<!-- <div class="col text-right">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">Create</button>
+			<button type="button" class="btn btn-primary">Delete</button>
+		</div> -->
+	</div>
+	<br>
+
+	<!-- ------------------- SLA Target Configuration Table -------------------- -->
+
+	<!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#Calendar"
+			style="margin-bottom:20px; margin:5px"><i class="far fa-calendar-alt"></i>&nbsp; Calendar</button> -->
+
+	<a id="modal-popup-calendar" class="btn btn-primary float-right" data-url="{% url 'Calendar' %}" role="button"
+		style="margin-bottom:20px; margin:5px"><i class="far fa-calendar-alt"></i>&nbsp; Calendar</a>
+
+	<a id="modal-popup" class="btn btn-primary float-right" data-url="{% url 'PMatrix' %}" role="button"
+		style="margin-bottom:20px; margin:5px"><i class="fas fa-table"></i>&nbsp; Configure Matrix</a>
+
+	<form class="form-inline" id="company_select" action={% url 'company_slainfo' %} method="post">
+
+		{% csrf_token %}
+		<div class="dropdown">
+			<select name="company_name" class="form-control selectpicker" id="company_name" data-live-search="true"
+				required>
+				<option style="display:none" selected value="">Select a Company</option>
+
+				{% for cn in cn %}
+				{% if cn.company_id == cval %}
+				<option selected type="{{ cn.company_id }}" value="{{ cn.company_id }}">{{ cn.name }}</option>
+				{% else %}
+				<option type="{{ cn.company_id }}" value="{{ cn.company_id }}">{{ cn.name }}</option>
+				{% endif %}
+				{% endfor %}
+
+			</select>
+			<button class="btn btn-primary" type="submit" from="company_select" name="company_btn">Show</button>
+		</div>
+	</form>
+
+
+	<form id="sla_form" action={% url 'sla_update' %} method="POST">
+		{% csrf_token %}
+		<br>
+		<input type="hidden" id="company_name" name="company_name" value="{{ sla_display.name }}">
+		<h6>Set SLA Target as: <h6>
+				{% csrf_token %}
+				<table class="table table-hover"
+					style="border-radius:5%; border: 1px solid lightgray; background-blend-mode: soft-light; text-align:center; margin-top:20px;">
+					<thead class="thead-light">
+						<tr style="padding-right:50px">
+							<th scope="col">Priority</th>
+							<th scope="col">First Response Time</th>
+							<th scope="col">Every Response Time</th>
+							<th scope="col">Resolution Time</th>
+							<th scope="col">Operational Hours</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><i class="fas fa-circle" style="color:#dc3545; margin-top:10%"></i><span
+									style="color:#dc3545"><b> 1</b></span></td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="FirstResponseTime1" type="number" id="FRT" class="form-control"
+										value="{{ sla_display.FRT1 }}" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="EveryResponseTime1" type="number" id="ERT" class="form-control"
+										value="{{ sla_display.ERT1 }}" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="ResolutionTime1" type="number" id="RT" class="form-control"
+										value="{{ sla_display.RT1 }}" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-row" style="padding-left:10%; padding-top:5px;">
+									<div class="dropdown">
+										<select name="hours1" class="custom-select mr-sm-2" id="inlineFormCustomSelect"
+											form="sla_form">
+											<option selected value="0">Business Hours</option>
+											<option value="1">Calendar Hours</option>
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><i class="fas fa-circle" style="color:#FFC107; margin-top:10%"></i><span
+									style="color:#FFC107"><b> 2</b></span></td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="FirstResponseTime2" type="number" id="FRT" value="{{ sla_display.FRT2 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left:8%">
+									<input name="EveryResponseTime2" type="number" id="RT" value="{{ sla_display.ERT2 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="ResolutionTime2" type="number" id="RT" value="{{ sla_display.RT2 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-row" style="padding-left:10% ; padding-top:5px">
+									<div class="dropdown">
+										<select name="hours2" class="custom-select mr-sm-2" id="inlineFormCustomSelect"
+											form="sla_form">
+											<option selected value="0">Business Hours</option>
+											<option value="1">Calendar Hours</option>
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><i class="fas fa-circle" style="color:#007bff; margin-top:10%"></i><span
+									style="color:#007bff"><b> 3</b></span></td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="FirstResponseTime3" type="number" id="FRT" value="{{ sla_display.FRT3 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="EveryResponseTime3" type="number" id="RT" value="{{ sla_display.ERT3 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="ResolutionTime3" type="number" id="RT" min="0"
+										value="{{ sla_display.RT3 }}" class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-row" style="padding-left:10% ; padding-top:5px">
+									<div class="dropdown">
+										<select name="hours3" class="custom-select mr-sm-2" id="inlineFormCustomSelect"
+											form="sla_form">
+											<option selected value="0">Business Hours</option>
+											<option value="1">Calendar Hours</option>
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><i class="fas fa-circle" style="color:#28a745; margin-top:10%"></i><span
+									style="color:#28a745"><b> 4</b></span></td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="FirstResponseTime4" type="number" id="FRT" value="{{ sla_display.FRT4 }}"
+										class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="EveryResponseTime4" type="number" id="RT" min="0"
+										value="{{ sla_display.ERT4 }}" class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="input-group mb-3" style="width: 250px; margin-left: 8%">
+									<input name="ResolutionTime4" type="number" id="RT" min="0"
+										value="{{ sla_display.RT4 }}" class="form-control" form="sla_form">
+									<select name="duration" class="custom-select mr-sm-2" id="SLA_duration">
+										<option selected value="0">Minutes</option>
+										<option value="1">Hour(s)</option>
+									</select>
+								</div>
+							</td>
+							<td>
+								<div class="form-row" style="padding-left:10% ; padding-top:5px">
+									<div class="dropdown">
+										<select name="hours4" class="custom-select mr-sm-2" id="inlineFormCustomSelect"
+											form="sla_form">
+											<option selected value="0">Business Hours</option>
+											<option value="1">Calendar Hours</option>
+										</select>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+	</form>
+
+	<!-- ----------------------- SLA Notification Table ------------------------ -->
+	<div class="row">
+		<div class="col">
+			<strong style="font-size: 24px;" id="incident-header">SLA Notification</strong>
+		</div>
+	</div>
+	<table class="table table-hover"
+		style="border-radius:10%; border: 1px solid lightgray; background-blend-mode: soft-light; text-align: center; margin-top:20px;">
+		<br>
+		<h6>Remind agents when the SLA due time approaches: </h6>
+				<div class="form-control1" style="background-color: #dbdbdb; z-index:-5">
+					<form>
+						<div id="readroot">
+							<button type="button" class="btn" name="SLA_delete"
+								style="float:right; margin-top:-1%; color:black"
+								onclick="this.parentNode.parentNode.removeChild(this.parentNode);"><i
+									class="fas fa-trash"></i></button>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="inputTarget">When</label>
+									<select class="form-control">
+										<option>Every Response Time</option>
+										<option>Resolution Time</option>
+									</select>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="inputHours"> approaches in</label>
+									<select class="form-control">
+										<option>15 minutes</option>
+										<option>30 minutes</option>
+										<option>45 minutes</option>
+										<option>1 hour</option>
+										<option>2 hours</option>
+										<option>3 hours</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputAddress">Send reminder to</label>
+
+								<div class="form-fluid">
+									<select class="js-example-basic-multiple" style="width:75%" name="user"
+										multiple="multiple" id=select2>
+										{% comment %}
+										{% for user in user %}
+										<option value="{{ user.name }}">{{ user.name }}</option>
+										{% endfor %}
+										{% endcomment %}
+									</select>
+								</div>
+
+							</div>
+							<div class="alert alert-danger" role="alert">
+								<i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;Reminders won't be sent
+								for <b>Urgent, High, Medium, Low</b> priority tickets.
+							</div>
+							<hr class="solid">
+						</div>
+						<span id="writeroot"></span>
+					</form>
+				</div>
+				<br>
+
+				<div class="">
+					<form method="post" action="">
+						<button type="button" id="moreFields" class="btn btn-primary"
+							style="float:left; margin-right:1%">Add Reminder</button>
+					</form>
+				</div>
+				<div class="" style="margin-top:0px; float:right">
+					<button type="submit" form="sla_form" formaction="{% url 'sla_update' %}"
+						class="btn btn-primary">Update SLA form</button>
+				</div>
+				<span>{{ cval }}</span>
+
+
+				<!-- <form class="" action={% url 'sla_calculation' %} method="post">
+					{% csrf_token %}
+					<div class="">
+						<input name="output" type="text" name="" value="{{ input.Deadline }}">
+						<button type="submit" name="button">Yup</button>
+					</div>
+				</form> -->
+	</table>
+
+	<div id="priorty_matrix_popup"></div>
+	<div id="calendar_popup"></div>
+
+	<script src="{% static 'js/SLA.js' %}"></script>
+	{% endblock %}
+
+</body>

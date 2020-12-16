@@ -1,0 +1,124 @@
+{% load static %}
+
+<head>
+    {% block css %}
+    <link rel='stylesheet' type="text/css" href="{% static 'css/navbar.css' %}">
+    <link rel='stylesheet' type="text/css" href="{% static 'css/sidebar.css' %}">
+    {% endblock %}
+
+</head>
+
+<!-- ------------------------------- NAVBAR -------------------------------- -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+
+    {% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+    <div id="sidebar-bars-toggle" data-trigger="#sidebar-offcanvas" style="padding: 5px;">
+        <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars fa-lg" style="color: black;"></i></a>
+    </div>
+    {% endif %}
+
+    {% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+    <a class="navbar-brand" href="#">&nbsp; SwiftDesk</a>
+    {% else %}
+    <a class="navbar-brand" href="#">&nbsp; SwiftDesk</a>
+    {% endif %}
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+        <ul class="navbar-nav mr-auto">
+            <!-- <li class="nav-item active">
+                <a class="nav-link" href={% url 'landing_page' %}>Home <span class="sr-only">(current)</span></a>
+            </li> -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" href=>Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li> -->
+        </ul>
+        {% else %}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href={% url 'landing_page' %}>Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={% url 'incident_form' %}>Request Ticket</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href={% url 'incident_ticket_overview' %}>My Tickets</a>
+            </li>
+        </ul>
+        {% endif %}
+
+        <!-- <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+
+        <ul class="nav navbar-nav navbar-right ml-auto">
+            <li class="nav-item dropdown">
+                <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img
+                        src="{% static "img/profile_pic_placeholder.png" %}" class="avatar" alt="Avatar"
+                        style="width: 36px; height: 36px;">&nbsp;{{ request.user.full_name }}<b class="caret"></b></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="" class="dropdown-item"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li>
+                        <div class="text-center">
+                            <a href="{% url 'logout' %}" class="btn btn-danger" role="button">Log Out</a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<b class="screen-overlay"></b>
+
+<!-- -------------------------- SIDEBAR OFFCANVAS -------------------------- -->
+{% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+<aside class="offcanvas" id="sidebar-offcanvas">
+    <header class="p-4 bg-light border-bottom">
+        <img src="{% static "img/infront_full.png" %}" class="avatar" alt="Avatar" style="width: 70%; height: 70%;">
+        <!-- <h6 class="mb-0">First offcanvas</h6> -->
+    </header>
+    <nav class="list-group list-group-flush">
+
+        {% if request.user.role == 'Admin' %}
+        <a href="{% url 'dashboard' %}" class="list-group-item"><i id="sidebar-icon"
+                class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard</a>
+        {% endif %}
+
+        <a href="#" class="list-group-item dropdown-btn"><i class="fas fa-tasks"></i>&nbsp;&nbsp;Ticket
+            Management</a>
+        <div id="incident-management-dropdown" class="dropdown-container">
+            <a href="{% url 'incident_form' %}" class="list-group-item">
+                <i class="fa fa-fw fa-file-signature"></i>&nbsp;&nbsp;New Ticket</a>
+
+            <a href="{% url 'incident_ticket_overview' %}" class="list-group-item">
+                <i class="fa fa-folder-open"></i>&nbsp;&nbsp;Tickets Overview
+            </a>
+        </div>
+
+        {% if request.user.role == 'Admin' %}
+        <a href="#" class="list-group-item dropdown-btn"><i class="fas fa-cog"></i>&nbsp;&nbsp;Settings</a>
+        <div id="settings-dropdown" class="dropdown-container">
+            <a href="{% url 'users' %}" class="list-group-item"><i class="fas fa-user-cog"></i>&nbsp;&nbsp;User
+                Settings</a>
+            <a href="{% url 'groups' %}" class="list-group-item"><i class="fas fa-users-cog"></i>&nbsp;&nbsp;Group
+                Settings</a>
+            <a href="{% url 'companies' %}" class="list-group-item"><i class="fas fa-building"></i>&nbsp;&nbsp;Company
+                Settings</a>
+        </div>
+        <a href="{% url 'SLA' %}" class="list-group-item"><i class="fas fa-clock"></i>&nbsp;&nbsp;SLA</a>
+        {% endif %}
+    </nav>
+</aside>
+{% endif %}

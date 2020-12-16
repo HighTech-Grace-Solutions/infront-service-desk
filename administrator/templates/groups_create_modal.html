@@ -1,0 +1,37 @@
+{% load static %}
+
+<!-- ------------------------- GROUP CREATE MODAL -------------------------- -->
+
+<div class="modal" id="group-create-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add new group</h5>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method='POST' action="{% url 'create_group' %}" id="create_group">
+				{% csrf_token %}
+				<div class="modal-body">
+
+					<div class="form-group">
+						<label for="formGroupExampleInput">Group<span style="color: red">&nbsp;*</span></label>
+						<input type="text" name="group_name" class="form-control" placeholder="Add new group" required>
+					</div>
+
+					<div class="form-group" id="round-robin-checkbox">
+						<input type="checkbox" name="group_round_robin" class="inline checkbox" value="True">
+						<label class="form-check-label">&nbsp;Enable Round-Robin</label>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Create Group</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+<head>
+	{% block css %}
+	<!-- Title -->
+	<title>Company Settings</title>
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
+	{% endblock %}
+
+</head>
+
+<body>
+	{% block content_container %}
+
+	<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'users' %}">User</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{% url 'groups' %}">Group</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link active" href="{% url 'companies' %}">Company</a>
+		</li>
+	</ul>
+
+	<br>
+	<div class="row">
+		<div class="col">
+			<strong style="font-size: 24px;" id="incident-header">Company Management</strong>
+		</div>
+		<div class="col text-right">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#company-create-modal">Create
+				Company</button>
+		</div>
+	</div>
+
+	<!-- ------------------------ CREATE COMPANY MODAL ------------------------- -->
+
+	<div class="modal" id="company-create-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Create Company Details</h5>
+
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+
+				</div>
+				<div class="modal-body">
+					<form method='POST' action={% url 'companies' %}>
+						{% csrf_token %}
+						<div class="form-group">
+							<label>ID<span style="color: red">&nbsp;*</span></label>
+							<input type="text" name="ID" class="form-control" placeholder="Company ID" required>
+						</div>
+						<div class="form-group">
+							<label>Name<span style="color: red">&nbsp;*</span></label>
+							<input type="text" name="name" class="form-control" placeholder="Company Name" required>
+						</div>
+
+						<div class="form-group">
+							<label>PIC</label>
+							<select class="selectpicker form-control" name="PIC" data-live-search="true">
+								<option value="Not Set" selected style="display: none">Not Set</option>
+								{% for account in accounts %}
+								<option value="{{ account.full_name }}">
+									{{ account.full_name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="formGroupExampleInput1">Email Address<span
+									style="color: red">&nbsp;*</span></label>
+							<input type="text" name="email" class="form-control" placeholder="Email Address" required>
+						</div>
+
+						<div class="form-group">
+							<label for="formGroupExampleInput2">Contact Number<span
+									style="color: red">&nbsp;*</span></label><br>
+							<input type="text" name="contact_number" class="form-control" placeholder="Contact Number"
+								required>
+						</div>
+
+						<div class="form-check" id="checkbox-value">
+							<input type="checkbox" name="round_robin" class="inline checkbox" id="checkbox1"
+								value="True">
+							<label class="form-check-label" for="exampleCheck1">Enable Round-Robin</label>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Create Company</button>
+				</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<!-- ---------------------- COMPANY MANAGEMENT TABLE ----------------------- -->
+	<div>
+		<table id="company-table" class="table table-hover table-center">
+			<thead class="thead-dark">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>PIC</th>
+					<th>Domain</th>
+					<th>Email</th>
+					<th>Contact Number</th>
+					<th>Round-Robin</th>
+					<th>Update</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for company in companies  %}
+				<tr>
+					<td class="row-center">{{ company.company_id }}</td>
+					<!-- <td class="row-center">{{ company.id }}</td> -->
+					<td class="row-center">{{ company.name }}</td>
+					<td class="row-center">{{ company.PIC }}</td>
+					<td class="row-center">{{ company.domain }}</td>
+					<td class="row-center">{{ company.email }}</td>
+					<td class="row-center">{{ company.contact_number }}</td>
+					<td class="row-center">{{ company.round_robin }}</td>
+					<td class="row-center">
+						<!-- USE DEFAULT ID -->
+						<!-- <a id="company-update-modal-pop" class="btn btn-secondary"
+							data-url="{% url 'update_company_modal' company.id %}" role="button"><i
+								class="fas fa-pencil-alt"></i></a> -->
+
+						<!-- USE CUSTOM COMPANY ID -->
+						<a id="company-update-modal-pop" class="btn btn-secondary"
+							data-url="{% url 'update_company_modal' company.company_id %}" role="button"><i
+								class="fas fa-pencil-alt"></i></a>
+					</td>
+					<td class="row-center">
+						<a id="company-delete-modal-pop" class="btn btn-secondary"
+							data-url="{% url 'delete_company_modal' company.company_id  %}" role="button"><i
+								class="fas fa-user-times"></i></i></a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<script src="{% static "js/admin.js" %}"></script>
+	<div id="company-update-modal-container"></div>
+	<div id="company-delete-modal-container"></div>
+	{% endblock %}
+
+</body>

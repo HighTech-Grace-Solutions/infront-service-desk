@@ -1,0 +1,26 @@
+/* -------------------------------------------------------------------------- */
+
+/*                              INCIDENT FORM CSS                             */
+
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------ INCIDENT FORM VALIDATION ------------------------ */
+
+.bootstrap-select .btn {
+	border: 1px solid #ced4da;
+	background-color: #fff;
+}
+
+/* ----------------------------- FORM VALIDATION ---------------------------- */
+
+/* Remove check icon from form custom validation */
+
+.form-control.is-valid, .was-validated .form-control:valid {
+	background-image: none;
+}
+
+/* ----------------- SUMMERNOTE WYSIWYG EDITOR CSS OVERRIDE ----------------- */
+
+.note-toolbar {
+	background: rgba(255, 255, 255, 0.11);
+}

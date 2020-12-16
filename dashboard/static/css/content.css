@@ -1,0 +1,97 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+.* {
+    box-sizing: border-box;
+}
+
+/* Float four columns side by side */
+.column {
+    float: left;
+    width: 23%;
+    padding: 0 5px;
+}
+
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+/* Style the counter cards */
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    background-color: #FFF;
+    color: Black;
+    border-radius:5%;
+}
+/*Skillbar*/
+/* Make sure that padding behaves as expected */
+
+/* Container for skill bars */
+.container {
+    width: 100%; /* Full width */
+    background-color: #ddd; /* Grey background */
+    height:8%;
+
+
+}
+
+.skills {
+    text-align:right; /* Right-align text */
+    padding-top: 5px; /* Add top padding */
+    padding-bottom: 1px; /* Add bottom padding */
+    margin-left:-4%;
+    color: black; /* White text color */
+    font-size: 10px;
+    vertical-align: middle;
+
+}
+
+.html {
+    width:30%;
+    background-color: red;
+
+}
+
+.css {
+    width:80%;
+    background-color: orange;
+}
+
+.js {
+    width:50%;
+    background-color: green;
+}
+
+.php {
+    width:40%;
+    background-color: dodgerblue;
+}
+
+.skill-text{
+    color:black;
+    display:inline-block;
+}
+
+.button_badge {
+  background-color: #fa3e3e;
+  border-radius: 2px;
+  color: white;
+
+  padding: 1px 3px;
+  font-size: 10px;
+
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  right: 0;
+}
+
+.dropdown-content {
+  z-index: 99;
+}

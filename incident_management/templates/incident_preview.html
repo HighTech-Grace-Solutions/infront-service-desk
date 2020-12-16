@@ -1,0 +1,132 @@
+{% load static %}
+<aside class="offcanvas-preview offcanvas-right" id="ticket-preview-off-canvas">
+
+    <header class="p-4 bg-light border-bottom">
+        <b>{{ preview.ticket_id }}</b>
+        <!-- <h6 class="mb-0">Second offcanvas </h6> -->
+        <button class="btn btn-outline-danger btn-close" type="button" onclick="closePreview()">&times Close</button>
+    </header>
+
+    <section id="tabs" class="project-tab">
+
+        <!-- <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Project Tab 1</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Project Tab 2</a>
+                </div>
+              </div>
+            </div>
+        </div> -->
+
+        <div class="container">
+            <a href="" class="nav-link" style="display:inline-block; vertical-align: middle; padding: 1.5rem .4rem;">
+                <img src="{% static "img/profile_pic_placeholder.png" %}" class="avatar" alt="Avatar" style="width: 36px; height: 36px;">
+                {{ preview.name }}
+            </a>
+            <br>
+            <strong style="font-size: 24px; padding: .5rem .4rem;" id="incident-header" data-toggle="dropdown">
+                {{ preview.title }}
+            </strong>
+            <p style="font-size: 12px; padding: .5rem .4rem;">Created: {{ preview.date_created }}</p>
+            <!-- <img src="{% static "img/placeholder_photo.png" %}" class="avatar" alt="Avatar"
+                style="width: 320px; height: 220px;"> -->
+
+            <p class="section-label"><span></span><b>DESCRIPTION</b></span></p>
+            <div class="form-group" style="width: 100%;">
+                <textarea id="summernote" rows="7" name="editordata" placeholder="Description of incident"
+                    required>{{ preview.description }}</textarea>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist" style="padding-top: 10px;">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                    aria-controls="nav-home" aria-selected="true">Attributes</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                    aria-controls="nav-profile" aria-selected="false">Comments</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent" style="padding-top: 20px;">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">Category:</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">{{ preview.category }}</li>
+                            </ul>
+
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">State</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">{{ preview.state }}</li>
+                            </ul>
+
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">Support Group</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">{{ preview.support_group }}</li>
+                            </ul>
+
+                        </div>
+                        <div class="col-sm">
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">Sub-category:</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">{{ preview.sub_category }}</li>
+                            </ul>
+
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">Source:</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">Service Desk</li>
+                            </ul>
+
+                            <ul class="list-group list-group-flush" style="font-size: 13px; padding-bottom: 20px;">
+                                <b style="font-size: 13px;">Assigned To:</b>
+                                <li class="list-group-item" style="padding: 0.3rem 0rem;">{{ preview.assigned_to }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="container">
+                    <p>hello world</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- <nav class="list-group list-group-flush">
+        <a href="#" class="list-group-item">Home</a>
+        <a href="#" class="list-group-item">About us</a>
+        <a href="#" class="list-group-item">Menu name 1</a>
+        <a href="#" class="list-group-item">Menu name 2</a>
+        <a href="#" class="list-group-item">Menu name 3</a>
+    </nav> -->
+</aside>
+
+<script>
+    $('#summernote').summernote({
+        height: 200, // set editor height
+        minHeight: null, // set minimum height of editor
+        maxHeight: null, // set maximum height of editor
+        // focus: true // set focus to editable area after initializing summernote
+        placeholder: 'Description of incident',
+        airMode: true,
+
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']],
+        ],
+    });
+
+    $("#summernote").summernote("disable");
+</script>

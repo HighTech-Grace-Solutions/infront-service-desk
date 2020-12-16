@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+* {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.wrapper {
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+th {
+	text-align: center;
+	/* vertical-align: middle; */
+}
+
+#user-table td {
+	min-width: 13.3vw;
+	/* min-width: 262px; */
+}
+
+#group-table td {
+	min-width: 21.4vw;
+	/* min-width: 262px; */
+}
+
+#company-table td {
+	min-width: 10.2vw;
+	/* min-width: 262px; */
+}
+
+
+.table td, .table th {
+	vertical-align: middle;
+}
+
+.row-center {
+	text-align: center;
+}
+
+#addbutton {
+	position: relative;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+#userAdd {
+	position: absolute;
+	display: inline-block;
+	padding: 0 6px;
+	border: 5px;
+}
+
+.profileImg {
+	border-radius: 50%;
+}
+
+

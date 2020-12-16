@@ -1,0 +1,420 @@
+{% extends "overview_base.html" %}
+{% load static %}
+{% block page_content %}
+
+<!-- -------------------------- FILTER DROPDOWNS --------------------------- -->
+<div class="row">
+	<!-- Ticket Filters Dropdown Menu -->
+	<div class="col">
+		<div class="dropdown" style="margin-bottom: 3%;">
+			<!-- Default is user's own incidents -->
+			<strong style="font-size: 24px;" id="incident-header" data-toggle="dropdown">
+				My Open Tickets <i class="fas fa-caret-down fa-xs"></i>
+			</strong>
+
+			<div class="dropdown-menu" aria-labelledby="dropdownMenu1" id="filter-dropdown">
+
+				<div class="input-group input-group-sm" style="padding: 0 10px 5px 10px;">
+					<input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"
+						placeholder="Search filter" id="filter-dropdown-search" onkeyup="filterFunction()">
+				</div>
+
+				<div id="filter-dropdown-content" class="dropdown-content">
+					<!-- <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()"> -->
+					<h6 class="dropdown-header" id="header">General Filters</h6>
+					<a class="dropdown-item filter" id="filter-general" data-custom-id="All">All Incidents</a>
+
+					<div class="dropdown-divider" id="divider"></div>
+
+					<h6 class="dropdown-header" id="header">User Filters</h6>
+					<a class="dropdown-item filter" id="filter-assigned-to"
+						data-custom-id="{{ user.first_name }} {{ user.last_name }}">My Open Incidents</a>
+
+					<div class="dropdown-divider" id="divider"></div>
+
+					<h6 class="dropdown-header" id="header">Support Group Filters</h6>
+					<a class="dropdown-item filter" id="filter-support-group" data-custom-id="{{ user.group }}">My SG
+						Incidents</a>
+
+					<div class="dropdown-divider" id="divider"></div>
+
+					<h6 class="dropdown-header" id="header">Incidents By State</h6>
+					<a class="dropdown-item filter" id="filter-state" data-custom-id="Assigned">Assigned</a>
+					<a class="dropdown-item filter" id="filter-state" data-custom-id="In Progress">In Progress</a>
+					<a class="dropdown-item filter" id="filter-state" data-custom-id="Resolved">Resolved</a>
+					<a class="dropdown-item filter" id="filter-state" data-custom-id="Open">Open</a>
+
+					<div class="dropdown-divider" id="divider"></div>
+
+					<h6 class="dropdown-header" id="header">Incidents By Priority</h6>
+					<a class="dropdown-item" id="filter-priority" data-custom-id="{{ ticket.priority }}">High Priority
+						Tickets</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Show/Hide Columns Dropdown Menu -->
+	<div class="buttons-set-container">
+		<!-- <div class="input-group mb-3 ml-auto" style="margin-top: 0.5rem!important; width: 50%;"> -->
+		<!-- <div class="input-group mb-3 ml-auto" style="width: 50%;">
+			<input type="text" class="form-control" id="search-input" placeholder="Search incident" aria-label="search">
+			<div class="input-group-append">
+				<span class="input-group-text"><i class="fa fa-search"></i></span>
+			</div>
+		</div> -->
+		<div>
+			<a class="btn btn-primary btn-sm" href="{% url 'incident_form' %}" role="button">New Ticket</a>
+		</div>
+		<div class="dropdown ml-auto" style="margin-bottom: 3%;">
+			<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="fa fa-table" aria-hidden="true"></i> &nbsp; Show/Hide Columns
+			</button>
+			<div class="dropdown-menu dropdown-menu-right" id="show-hide-col-dropdown"
+				aria-labelledby="dropdownMenuButton">
+				<!-- Dropdown header -->
+				<h6 class="dropdown-header">Edit Columns:</h6>
+
+				<!-- Show/hide ID column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="0" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						ID
+					</label>
+				</a>
+
+				<!-- Show/hide State column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="1" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						State
+					</label>
+				</a>
+
+				<!-- Show/hide Preview column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="2" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Preview
+					</label>
+				</a>
+
+				<!-- Show/hide Title column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="3" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Title
+					</label>
+				</a>
+
+				<!-- Show/hide Priority column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="4" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Priority
+					</label>
+				</a>
+
+				<!-- Show/hide Category column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="5" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Category
+					</label>
+				</a>
+
+				<!-- Show/hide Sub-Category column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="6" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Sub-category
+					</label>
+				</a>
+
+				<!-- Show/hide Source column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="7" value="">
+					<label class="form-check-label" for="defaultCheck1">
+						Source
+					</label>
+				</a>
+
+				<!-- Show/hide Reported By column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="8" value="">
+					<label class="form-check-label" for="defaultCheck1">
+						Reported By
+					</label>
+				</a>
+
+				<!-- Show/hide Support Group column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="9" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Support Group
+					</label>
+				</a>
+
+				<!-- Show/hide Assigned To column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="10" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						Assigned To
+					</label>
+				</a>
+
+				<!-- Show/hide SLA (Response) column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="11" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						SLA (Response)
+					</label>
+				</a>
+
+				<!-- Show/hide SLA (Resolution) column -->
+				<a class="dropdown-item">
+					<input class="toggle-vis" id="defaultCheck1" type="checkbox" data-column="12" value="" checked>
+					<label class="form-check-label" for="defaultCheck1">
+						SLA (Resolution)
+					</label>
+				</a>
+
+				<!-- Toggle via link -->
+				<!-- <a class="dropdown-item toggle-vis" data-column="0">ID</a>
+				<a class="dropdown-item toggle-vis" data-column="1">State</a>
+				<a class="dropdown-item toggle-vis" data-column="2">Title</a> -->
+			</div>
+		</div>
+
+	</div>
+
+
+</div>
+
+<!-- INCIDENT OVERVIEW TABLE -->
+<div>
+	<table class="table table-hover table-center" id="overview-table">
+		<!-- Table headers -->
+		<thead>
+			<tr style="font-size: 16px; color: #576271;">
+				<th>ID</th>
+				<th>STATE</th>
+				<th>PREVIEW</th>
+				<th>TITLE</th>
+				<th>PRIORITY</th>
+				<th>CATEGORY</th>
+				<th>SUB-CATEGORY</th>
+				<th>SOURCE</th>
+				<th>REPORTED BY</th>
+				<th class="support-group-col">SUPPORT GROUP</th>
+				<th class="assigned-to-col">ASSIGNED TO</th>
+				<th>SLA (RESPONSE)</th>
+				<th>SLA (RESOLUTION)</th>
+			</tr>
+		</thead>
+		<tbody id="incident-table" style="font-size: 14px;">
+
+			<!-- Incident Tickets Row -->
+			{% if request.user.role == 'Admin' or request.user.role == 'Technician' %}
+			{% for ticket in incident_ticket %}
+			<tr class="table-row" data-href="{% url 'incident_report' ticket.ticket_id %}">
+				<!-- 1. Ticket ID -->
+				<td class="row-center" id="ticket_id">
+					<b>{{ ticket.ticket_id }}</b>
+				</td>
+
+				<!-- 2. Ticket State -->
+				<td class="row-center" id="ticket_state">
+					<label class="badge badge-primary">{{ ticket.state }}</label>
+				</td>
+
+				<!-- 3. Ticket Preview -->
+				<td class="row-center" id="ticket_preview">
+					<a id="off-canvas-preview-pop" class="btn btn-primary btn-sm"
+						data-url="{% url 'incident_preview' ticket.ticket_id %}" role="button"><i
+							class="fas fa-eye"></i></a>
+				</td>
+
+				<!-- 4. Ticket Title -->
+				<td class="row-center">
+					<strong><a href="{% url 'incident_report' ticket.ticket_id %}">{{ ticket.title }}</a></strong>
+				</td>
+
+				<!-- 5. Ticket Priority -->
+				<td class="row-center" id="ticket_priority">
+					{% if ticket.priority == 1 %}
+					<i class="fas fa-arrow-up" style="color: red"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 2 %}
+					<i class="fas fa-arrow-up" style="color: orange"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 3 %}
+					<i class="fas fa-arrow-up" style="color: yellow"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 4 %}
+					<i class="fas fa-arrow-up" style="color: green"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% endif %}
+				</td>
+
+				<!-- 6. Category -->
+				<td class="row-center" id="category">
+					<i class="fa fa-folder fa-2x" style="vertical-align:middle; color: blue"></i>
+					&nbsp; {{ ticket.category }}
+				</td>
+
+				<!-- 7. Sub-category -->
+				<td class="row-center" id="sub-category">
+					<i class="fa fa-folder fa-2x" style="vertical-align: middle; color: pink"></i>
+					&nbsp; {{ ticket.sub_category }}
+				</td>
+
+				<!-- 8. Source -->
+				<td class="row-center" id="source">Source</td>
+
+				<!-- 9. Reported By-->
+				<td class="row-center" id="reported_by">
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle;">
+						<img src="{% static "img/profile_pic_placeholder.png" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">
+						{{ ticket.name }}
+					</a>
+				</td>
+
+				<!-- 10. Support Group -->
+				<td class="row-center" id="support_group">
+					<i class="fa fa-folder fa-2x" style="vertical-align: middle; color: purple"></i>&nbsp;
+					{{ ticket.support_group }}</td>
+
+				<!-- 11. Assigned To -->
+				<td class="row-center">
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle;">
+						<img src="{% static "img/profile_pic_placeholder.png" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">{{ ticket.assigned_to }}</a>
+				</td>
+
+				<!-- 12. SLA (Response) -->
+				<td class="row-center">
+					<button type="button" class="btn btn-outline-danger">
+						<!-- <i class="fas fa-clock" style="color: red;"></i> -->
+						{{ ticket.sla_response }}
+					</button>
+				</td>
+
+				<!-- 13. SLA (Resolution) -->
+				<td class="row-center">
+					<button type="button" class="btn btn-outline-danger">
+						<!-- <i class="fas fa-clock" style="color: red;"></i> -->
+						{{ ticket.sla_resolution }}
+					</button>
+				</td>
+			</tr>
+			{% endfor %}
+			{% else %}
+			{% for ticket in incident_ticket %}
+			<tr class="table-row" data-href="{% url 'incident_report' ticket.ticket_id %}">
+				<!-- 1. Incident ID -->
+				<td class="row-center" id="ticket_id"><b>{{ ticket.ticket_id }}</b></td>
+
+				<!-- 2. Ticket State -->
+				<td class="row-center" id="ticket_state"><label class="badge badge-success">{{ ticket.state }}</label>
+				</td>
+
+				<!-- 3. Ticket Preview -->
+				<td class="row-center" id="ticket_preview">
+					<a id="off-canvas-preview-pop" class="btn btn-primary btn-sm"
+						data-url="{% url 'incident_preview' ticket.ticket_id %}" role="button"><i
+							class="fas fa-eye"></i></a>
+				</td>
+
+				<!-- 3. Ticket Title -->
+				<td>
+					<strong><a href="{% url 'incident_report' ticket.ticket_id %}">{{ ticket.title }}</a></strong>
+				</td>
+
+				<!-- 4. Ticket Priority -->
+				<td class="row-center" id="ticket_prority">
+					{% if ticket.priority == 1 %}
+					<i class="fas fa-arrow-up" style="color: red"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 2 %}
+					<i class="fas fa-arrow-up" style="color: orange"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 3 %}
+					<i class="fas fa-arrow-up" style="color: yellow"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% elif ticket.priority == 4 %}
+					<i class="fas fa-arrow-up" style="color: green"></i>
+					<span><b>{{ ticket.priority }}</b></span>
+					{% endif %}
+
+					<!-- <i class="fas fa-arrow-up" style="color: orange"></i>
+					<span><b>HIGH</b></span> -->
+				</td>
+
+				<!-- 5. Category -->
+				<td class="row-center" id="category">
+					<i class="fa fa-folder fa-2x" style="vertical-align:middle; color: blue"></i>
+					&nbsp; {{ ticket.category }}
+				</td>
+
+				<!-- 6. Sub-category -->
+				<td class="row-center" id="sub-category">
+					<i class="fa fa-folder fa-2x" style="vertical-align: middle; color: pink"></i>
+					&nbsp; {{ ticket.sub_category }}
+				</td>
+
+				<!-- 7. Source -->
+				<td class="row-center" id="source">Source</td>
+
+				<!-- 8. Reported By-->
+				<td class="row-center" id="reported_by">
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle;">
+						<img src="{% static "img/test.jpg" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">
+						{{ ticket.name }}
+					</a>
+				</td>
+
+				<!-- 9. Category -->
+				<td class="row-center" id=support_group>
+					<i class="fa fa-folder fa-2x" style="vertical-align: middle; color: purple"></i>
+					&nbsp; {{ ticket.support_group }}
+				</td>
+
+				<!-- 10. Assigned To -->
+				<td class="row-center">
+					<a href="" class="nav-link" style="display:inline-block; vertical-align: middle;">
+						<img src="{% static "img/IMG_3063.jpg" %}" class="avatar" alt="Avatar"
+							style="width: 36px; height: 36px;">{{ ticket.assigned_to }}</a>
+				</td>
+
+				<!-- 11. SLA (Response) -->
+				<td class="row-center">
+					<button type="button" class="btn btn-outline-danger">
+						<!-- <i class="fas fa-clock" style="color: red;"></i> -->
+						{{ ticket.sla_response }}
+					</button>
+				</td>
+
+				<!-- 12. SLA (Resolution) -->
+				<td class="row-center">
+					<button type="button" class="btn btn-outline-danger">
+						<!-- <i class="fas fa-clock" style="color: red;"></i> -->
+						{{ ticket.sla_resolution }}
+					</button>
+				</td>
+			</tr>
+			{% endfor %}
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+
+<!-- OFF CANVAS -->
+<b id="screen-overlay-preview" class="screen-overlay-preview"></b>
+<div id="off-canvas-preview"></div>
+
+{% endblock %}

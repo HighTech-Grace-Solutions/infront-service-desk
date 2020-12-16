@@ -1,0 +1,74 @@
+{% load static %}
+<!-- -------------------------- User Update Modal -------------------------- -->
+
+<div class="modal" id="company-update-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Update Company Information</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method='POST' id="company-update-form" action="{% url 'update_company' company.company_id %}">
+				<div class="modal-body">
+					{% csrf_token %}
+
+					<div class="form-group">
+						<label>Company ID<span style="color: red">&nbsp;*</span></label>
+						<input type="text" name="ID" class="form-control" placeholder="Company ID"
+							value="{{ company.company_id }}" required>
+					</div>
+
+					<div class="form-group">
+						<label>Company Name</label>
+						<input type="text" name="name" class="form-control" placeholder="Company Name"
+							value="{{ company.name }}" required>
+					</div>
+
+					<div class="form-group">
+						<label>Email</label>
+						<input type="text" name="email" class="form-control" placeholder="Company Name"
+							value="{{ company.email }}" required>
+					</div>
+
+					<div class="form-group">
+						<label>PIC</label>
+						<select id="PIC" class="selectpicker form-control" name="PIC" data-live-search="true">
+							<option value="Not Set" selected style="display: none">Not Set</option>
+							{% for account in accounts %}
+							<option value="{{ account.full_name }}">
+								{{ account.full_name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>Contact Number</label>
+						<input type="text" name="contact_number" class="form-control" placeholder="Phone Number"
+							value="{{ company.contact_number }}" required>
+					</div>
+
+					<div class="form-group" id="checkbox-value">
+
+						{% if company.round_robin == True %}
+						<input type="checkbox" name="round_robin" class="inline checkbox" value="True" checked>
+						{% else %}
+						<input type="checkbox" name="round_robin" class="inline checkbox" value="True">
+						{% endif %}
+
+						<label class="form-check-label">&nbsp;Enable Round-Robin</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Update Company</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+    $('#PIC').selectpicker();
+</script>

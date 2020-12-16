@@ -1,0 +1,310 @@
+{% extends "form_base.html" %} {% load static %} {% block form_content %}
+
+<div class="row">
+	<div class="col">
+
+		<!-- Use custom client-side validation (not browser) -->
+		<form class="needs-validation" method="POST" action={% url 'form_process' %} novalidate>
+			{% csrf_token %}
+			<!-- ----------------------- Name and Email Address ------------------------ -->
+
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="inputName">Name<span style="color: red">&nbsp;*</span></label>
+					<input name="name" type="name" class="form-control" id="inputName" placeholder="Name"
+						value="{{ user.first_name }} {{ user.last_name }}" readonly="readonly" required />
+					<div class="invalid-feedback">Please enter your name</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputEmail">Email<span style="color: red">&nbsp;*</span></label>
+					<input name="email" type="email" class="form-control" id="inputEmail" readonly="readonly"
+						placeholder="Email" value="{{ user.email }}" required />
+					<div class="invalid-feedback">
+						Please enter a valid email address
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputCompany">Company<span style="color: red">&nbsp;*</span></label>
+					<input name="company" type="text" class="form-control" id="inputCompany" readonly="readonly"
+						placeholder="Company" value="{{ user.company_name }}" required />
+					<!-- <div class="invalid-feedback">
+						Please enter a valid email address
+					</div> -->
+				</div>
+			</div>
+
+			<!-- -------------------------------- Title -------------------------------- -->
+			<div class="form-row">
+				<div class="form-group col-md-8">
+					<label for="inputTitle">Title<span style="color: red">&nbsp;*</span></label>
+					<input name="title" type="text" class="form-control" id="inputAddress" placeholder="Incident title"
+						required/>
+					<div class="invalid-feedback">Please enter a incident title</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputTicketType">Ticket Type<span style="color: red">&nbsp;*</span></label><br>
+					<select id="inputTicketType" name="type" class="selectpicker form-control" data-live-search="true"
+						required>
+						<option value="" selected style="display: none">Not set</option>
+
+						{% for type in type %}
+						<option type="{{ type.name }}" value="{{ type.name }}">
+							{{ type.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<!-- ----------------------------- Description ----------------------------- -->
+			<div class="form-group">
+				<label for="inputDescription">Description:</label><span style="color: red">&nbsp;*</span></label>
+				<!-- <textarea class="form-control" id="exampleFormControlTextarea3" rows="7"
+					placeholder="Description of incident" required></textarea> -->
+				<textarea id="summernote" rows="7" name="description" placeholder="Description of incident"
+					required></textarea>
+				<div class="invalid-feedback">Please enter a description of the incident</div>
+			</div>
+
+			<!-- ---------------------- Category and Sub-Category ---------------------- -->
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="inputCategory">Category<span style="color: red">&nbsp;*</span></label><br>
+
+					<select id="inputCategory" name="inputCategory" class="selectpicker form-control"
+						data-live-search="true" required>
+						<option style="display:none" selected value="">Not set</option>
+						<!-- <option type="Applications" value="Applications">Applications</option>
+						<option type="Server" value="Server">Server</option> -->
+
+						{% for cat in category %}
+						<option type="{{ cat.name }}" value="{{ cat.name }}">
+							{{ cat.name }}</option>
+						{% endfor %}
+					</select>
+
+				</div>
+
+				<div class="form-group col-md-6">
+					<label for="inputSubcategory">Sub-category<span style="color: red">&nbsp;*</span></label><br>
+
+					<fieldset id="subcategory">
+						<select id="inputSubcategory" name="inputSubcategory" class="selectpicker form-control"
+							data-live-search="true" required>
+							<option style="display: none;" selected value="">Not set</option>
+
+							{% for subcat in sub_category %}
+							<option type="{{ subcat.parent_category }}" value="{{ subcat.name }}">
+								{{ subcat.name }}</option>
+							{% endfor %}
+						</select>
+					</fieldset>
+
+				</div>
+			</div>
+
+			<!-- -------------------- Support Group and Assigned To -------------------- -->
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="inputSupportGroup">Support Group<span style="color: red">&nbsp;*</span></label><br>
+
+					<select id="inputSupportGroup" name="inputSupportGroup" class="selectpicker form-control"
+						data-live-search="true" required>
+						<option value="" selected style="display: none">Not set</option>
+
+						{% for sg in support_group %}
+						<option type="{{ sg.name }}" value="{{ sg.name }}">
+							{{ sg.name }}</option>
+						{% endfor %}
+					</select>
+
+				</div>
+
+				<div class="form-group col-md-6">
+					<label for="inputAssignee">Assigned to<span style="color: red">&nbsp;*</span></label><br>
+					<fieldset id="assignee">
+						<select id="inputAssignee" name="inputAssignee" class="selectpicker form-control"
+							data-live-search="true" required>
+							<option value="" selected style="display: none">Not set</option>
+
+							{% for tech_select in technician_round_robin %}
+							{% if tech_select.name == tech.name %}
+							<option selected type="{{ tech_select.group }}" value="{{ tech_select.email.full_name }}">
+								{{ tech_select.email.full_name }}</option>
+							{% endif %}
+							{% endfor %}
+
+							{% for tech in technician %}
+							<option type="{{ tech.group }}" value="{{ tech.email.full_name }}">{{ tech.email.full_name }}
+							</option>
+							{% endfor %}
+						</select>
+					</fieldset>
+					<small class="form-text text-muted">Technician auto-selected if Round-Robin is applied</small>
+
+				</div>
+			</div>
+
+			<!-- ------------------------- Impact and Urgency -------------------------- -->
+
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="inputImpact">Impact<span style="color: red">&nbsp;*</span></label><br>
+
+					<select id="inputImpact" name="inputImpact" class="selectpicker form-control"
+						data-live-search="true" required>
+						<option style="display: none;" selected value="">Not set</option>
+
+						{% for impact in impact %}
+						<option value="{{ impact.impact }}">{{ impact.impact }}</option>
+						{% endfor %}
+
+					</select>
+					<small class="form-text text-muted">1 - High, 3 - Low</small>
+
+				</div>
+
+				<div class="form-group col-md-4">
+					<label for="inputUrgency">Urgency<span style="color: red">&nbsp;*</span></label><br>
+
+					<fieldset id="urgency">
+						<select id="inputUrgency" name="inputUrgency" class="selectpicker form-control"
+							data-live-search="true" required>
+							<option style="display: none;" selected value="">Not set</option>
+							<!-- <option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option> -->
+
+							{% for urgency in urgency %}
+							<option value="{{ urgency.urgency }}">{{ urgency.urgency }}</option>
+							{% endfor %}
+
+						</select>
+					</fieldset>
+					<small class="form-text text-muted">1 - High, 3 - Low</small>
+
+				</div>
+
+				<div class="form-group col-md-4">
+					<label for="inputPriority">Priority</label><br>
+					<p id="priority"></p>
+				</div>
+			</div>
+
+			<!-- ---------------- SLA Deadlines (Response, Resolution) ----------------- -->
+
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="inputSLA_Response">First Response Time<span
+							style="color: red">&nbsp;*</span></label><br>
+
+					<div class="input-group" id="SLA1-duration">
+						<!-- <input name="inputSLA_Response" id="inputSLA_Response" type="datetime-local"
+							class="form-control" value="{{ res_time }}" required> -->
+						<!-- <input type="text" value="{{ res_time }}" class="form-control"> -->
+						<div class="invalid-feedback">Please set a SLA deadline</div>
+					</div>
+					<small class="form-text text-muted">Duration</small><br>
+
+					<div class="input-group" id="SLA1-datetime">
+						<!-- <input name="inputSLA_Response" id="inputSLA_Response" type="datetime-local"
+							class="form-control" value="{{ res_time }}" required> -->
+						<!-- <input type="text" value="{{ res_time }}" class="form-control"> -->
+					</div>
+					<small class="form-text text-muted">Datetime (due before)</small><br>
+
+				</div>
+
+				<div class="form-group col-md-6">
+					<label for="inputSLA_Resolution">Resolution Time<span style="color: red">&nbsp;*</span></label><br>
+
+					<div class="input-group" id="SLA2-duration">
+						<!-- <input name="inputSLA_Resolution" id="inputSLA_Resolution" type="datetime-local"
+							class="form-control" required> -->
+						<div class="invalid-feedback">Please set a SLA deadline</div>
+					</div>
+					<small class="form-text text-muted">Duration</small><br>
+
+					<div class="input-group" id="SLA2-datetime">
+						<!-- <input name="inputSLA_Resolution" id="inputSLA_Resolution" type="datetime-local"
+							class="form-control" required> -->
+						<div class="invalid-feedback">Please set a SLA deadline</div>
+					</div>
+					<small class="form-text text-muted">Datetime (due before)</small><br>
+				</div>
+			</div>
+
+			<button type="submit" class="btn btn-primary float-right">Submit</button>
+		</form>
+	</div>
+	<!-- <div class="col col-lg-3">
+	</div> -->
+</div>
+
+<script>
+	// JavaScript for disabling form submissions if there are invalid fields
+	(function () {
+		"use strict";
+
+		window.addEventListener(
+			"load",
+			function () {
+				// Fetch all the forms we want to apply custom Bootstrap validation styles to
+				var forms = document.getElementsByClassName("needs-validation");
+				// Loop over them and prevent submission
+				var validation = Array.prototype.filter.call(forms, function (form) {
+					form.addEventListener(
+						"submit",
+						function (event) {
+							if (form.checkValidity() === false) {
+								event.preventDefault();
+								event.stopPropagation();
+							}
+							form.classList.add("was-validated");
+						},
+						false
+
+						
+					);
+				});
+			},
+			false
+		);
+
+		
+	})();
+
+	// Get current datetime from
+	const current_datetime = "{{ current_time|safe }}";
+
+	// Display Response Time
+	const sla_FRT = parseInt("{{ sla.FRT1|safe }}");
+	var convert_current_datetime = moment(current_datetime).format("YYYY-MM-DDTHH:mm");
+	var target_datetime_FRT = moment(convert_current_datetime).add(sla_FRT, 'm').toDate();
+	var convert_FRT = moment(target_datetime_FRT).format("YYYY-MM-DDTHH:mm")
+
+	var sla_response_duration = document.getElementById('SLA1-duration');
+	var sla_response_datetime = document.getElementById('SLA1-datetime');
+	sla_response_duration.innerHTML = '<input type="text" class="form-control" value="' + sla_FRT + ' minutes' +
+		'"readonly="readonly"  required>'
+	sla_response_datetime.innerHTML =
+		'<input name="inputSLA_Response" id="inputSLA_Response" type="datetime-local" class="form-control" value="' +
+		convert_FRT + '"readonly="readonly" required>'
+
+
+	// Display Resolution Time
+	const sla_RT = parseInt("{{ sla.RT1|safe }}");
+	const deadline = "{{ deadline|safe }}";
+	var convert_deadline = moment(deadline).format("YYYY-MM-DDTHH:mm");
+	// var target_datetime_RT = moment(convert_current_datetime).add(sla_RT, 'h').toDate();
+	// var convert_RT = moment(target_datetime_RT).format("YYYY-MM-DDTkk:mm")
+	var sla_resolution_duration = document.getElementById('SLA2-duration');
+	var sla_resolution_datetime = document.getElementById('SLA2-datetime');
+
+	sla_resolution_duration.innerHTML = '<input type="text" class="form-control" value="' + sla_RT + ' hours' +
+		'"readonly="readonly"  required>'
+	sla_resolution_datetime.innerHTML +=
+		'<input name="inputSLA_Resolution" id="inputSLA_Resolution" type="datetime-local" class="form-control" value="' +
+		convert_deadline + '"readonly="readonly" required>'
+</script>
+{% endblock %}

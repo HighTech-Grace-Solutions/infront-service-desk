@@ -1,0 +1,84 @@
+{% load static %}
+
+<div class="modal fade" tabindex="-1" role="dialog" id="Matrix"aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title"><i class="fas fa-table"></i>&nbsp; SLA Priority Matrix</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <form id="sla_priority_submit" action={% url 'MatrixUpdate' %} method="POST">
+    <div class="modal-body">
+    {% csrf_token %}
+
+
+      <input type="hidden" id="priority_company_name" name="priority_company_name" value="{{ sla_display.name }}">
+
+      <span>{{ cval }}</span>
+        <label for="Title">Urgency<span style="color: red">&nbsp;*</span></label>
+        <label for="Title" style="margin-left:180px">Impact<span style="color: red">&nbsp;*</span></label>
+            <span class="inline" style="display:inline-flex; vertical-align:middle">
+              <input name="UrgencyName1" type="text" class="form-control" id="exampleInputName2" placeholder="High" onfocus="this.placeholder=''" onblur="this.placeholder='High'" style="width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="UrgencyNumber1" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="1" onfocus="this.placeholder=''" onblur="this.placeholder='1'" style="margin-left:10px; width:100px" required>
+              <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+              <input name="ImpactName1" type="text" class="form-control" id="exampleInputName2" placeholder="High" onfocus="this.placeholder=''" onblur="this.placeholder='High'" style="margin-left:0px; width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="ImpactNumber1" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="1" onfocus="this.placeholder=''" onblur="this.placeholder='1'" style="margin-left:10px; width:100px" required>
+              <!-- <button id="AddPriority" type="button"class="btn btn-primary AddPriority" name="SLA_delete" style="margin-left:10px" onclick="appendInput()"><i class="fas fa-plus"></i></button> -->
+            </span>
+           <span class="inline" style="display:inline-flex; vertical-align:middle; padding-top:10px">
+              <input name="UrgencyName2" type="text" class="form-control" id="exampleInputName2" placeholder="Medium" onfocus="this.placeholder=''" onblur="this.placeholder='Medium'" style="width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="UrgencyNumber2" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="2" onfocus="this.placeholder=''" onblur="this.placeholder='2'" style="margin-left:10px; width:100px" required>
+              <input name="ImpactName2" type="text" class="form-control" id="exampleInputName2" placeholder="Medium" onfocus="this.placeholder=''" onblur="this.placeholder='Medium'" style="margin-left:20px; width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="ImpactNumber2" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="2" onfocus="this.placeholder=''" onblur="this.placeholder='2'" style="margin-left:10px; width:100px" required>
+           </span>
+            <span class="inline" style="display:inline-flex; vertical-align:middle; padding-top:10px">
+              <input name="UrgencyName3" type="text" class="form-control" id="exampleInputName2" placeholder="Low" onfocus="this.placeholder=''" onblur="this.placeholder='Low'" style="width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="UrgencyNumber3" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="3" onfocus="this.placeholder=''" onblur="this.placeholder='3'" style="margin-left:10px; width:100px" required>
+              <input name="ImpactName3" type="text" class="form-control" id="exampleInputName2" placeholder="Low" onfocus="this.placeholder=''" onblur="this.placeholder='Low'" style="margin-left:20px; width:100px" required>
+              <label style="padding-top:10px">&nbsp;&nbsp;:</label>
+              <input name="ImpactNumber3" type="number" class="form-control" id="exampleInputEmail2" min="1" max="3" placeholder="3" onfocus="this.placeholder=''" onblur="this.placeholder='3'" style="margin-left:10px; width:100px" required>
+              <!-- <button type="button"class="btn btn-primary" name="SLA_delete" style="margin-left:10px"><i class="fas fa-trash-alt"></i></button> -->
+            </span>
+            <br>
+
+  <!-- Priority Matrix -->
+            <label style="margin-top:30px; margin-bottom:5px; margin-left:195px"><h4>Impact</h4></label>
+            <div class="">
+              <label style="margin-left:120px">High</label>
+              <label style="margin-left:65px">Med</label>
+              <label style="margin-left:65px">Low</label>
+            </div>
+            <span class="inline" style="display:inline-flex; vertical-align:middle">
+              <label style="margin-right:50px; margin-top:15px">High</label>
+              <input readonly="readonly" type="text" class="form-control text-center" value="1-Critical" style="width:100px; height:50px; background-color:red; outline:none">
+              <input readonly="readonly" type="text" class="form-control text-center" value="2-High" style="width:100px; height:50px; background-color:orange">
+              <input readonly="readonly" type="text" class="form-control text-center" value="3-Med" style="width:100px; height:50px; background-color:yellow">
+            </span>
+            <span class="inline" style="display:inline-flex; vertical-align:middle">
+              <label style="margin-right:22px; margin-top:15px">Medium</label>
+              <input readonly="readonly" type="text" class="form-control text-center" value="2-High" style="width:100px; height:50px; background-color:orange">
+              <input readonly="readonly" type="text" class="form-control text-center" value="3-Med" style="width:100px; height:50px; background-color:yellow">
+              <input readonly="readonly" type="text" class="form-control text-center" value="4-Low" style="width:100px; height:50px; background-color:lightgreen">
+            </span>
+            <span class="inline" style="display:inline-flex; vertical-align:middle">
+              <label style="margin-right:53px; margin-top:15px">Low</label>
+              <input readonly="readonly" type="text" class="form-control text-center" value="3-Med" style="width:100px; height:50px; background-color:yellow">
+              <input readonly="readonly" type="text" class="form-control text-center" value="4-Low" style="width:100px; height:50px; background-color:lightgreen">
+              <input readonly="readonly" type="text" class="form-control text-center" value="4-Low" style="width:100px; height:50px; background-color:lightgreen">
+            </span>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" form="sla_priority_submit" formaction="{% url 'MatrixUpdate' %}" class="btn btn-primary">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+     </div>
+  </div>
+</div>

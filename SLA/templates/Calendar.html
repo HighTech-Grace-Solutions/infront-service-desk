@@ -1,0 +1,221 @@
+{% load static %}
+
+<div class="modal fade" id="Calendar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"	aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="far fa-calendar-alt"></i>&nbsp; Calendar
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{% url 'Calendar_Update' %}" method="POST">
+      <div class="modal-body">
+                {% csrf_token %}
+        <label for="Title">Title:</label>
+        <input id="Title" name="Calendar_Title" type="text" class="form-control d-flex"
+          style="margin-bottom:10px">
+        <label for="Timezone">Timezone:</label>
+        <div class="dropdown" style="margin-bottom:10px">
+          <select class="form-control Time" name="timezone_select" type="text">
+            <option value="-1200">(GMT -12:00) Eniwetok, Kwajalein</option>
+            <option value="-1100">(GMT -11:00) Midway Island, Samoa</option>
+            <option value="-1000">(GMT -10:00) Hawaii</option>
+            <option value="-0950">(GMT -9:30) Taiohae</option>
+            <option value="-0900">(GMT -9:00) Alaska</option>
+            <option value="-0800">(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+            <option value="-0700">(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+            <option value="-0600">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
+            <option value="-0500">(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+            <option value="-0450">(GMT -4:30) Caracas</option>
+            <option value="-0400">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+            <option value="-0350">(GMT -3:30) Newfoundland</option>
+            <option value="-0300">(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+            <option value="-0200">(GMT -2:00) Mid-Atlantic</option>
+            <option value="-0100">(GMT -1:00) Azores, Cape Verde Islands</option>
+            <option value="+0000">(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+            <option value="+0100">(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</option>
+            <option value="+0200">(GMT +2:00) Kaliningrad, South Africa</option>
+            <option value="+0300">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+            <option value="+0350">(GMT +3:30) Tehran</option>
+            <option value="+0400">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+            <option value="+0430">(GMT +4:30) Kabul</option>
+            <option value="+0500">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+            <option value="+0530">(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+            <option value="+0545">(GMT +5:45) Kathmandu, Pokhara</option>
+            <option value="+0600">(GMT +6:00) Almaty, Dhaka, Colombo</option>
+            <option value="+0630">(GMT +6:30) Yangon, Mandalay</option>
+            <option value="+0700">(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+            <option value="+0800" selected="selected">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+            <option value="+0845">(GMT +8:45) Eucla</option>
+            <option value="+0900">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+            <option value="+0950">(GMT +9:30) Adelaide, Darwin</option>
+            <option value="+1000">(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+            <option value="+1050">(GMT +10:30) Lord Howe Island</option>
+            <option value="+1100">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+            <option value="+1150">(GMT +11:30) Norfolk Island</option>
+            <option value="+1200">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+            <option value="+1275">(GMT +12:45) Chatham Islands</option>
+            <option value="+1300">(GMT +13:00) Apia, Nukualofa</option>
+            <option value="+1400">(GMT +14:00) Line Islands, Tokelau</option>
+          </select>
+        </div>
+
+        <table class="table table-hover" style="table-layout:fixed; width:100%">
+          <thead class="thead-light" style="text-align:center;">
+            <tr>
+              <th>Work Days:</th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"
+                  checked>
+                <label class="form-check-label" for="inlineCheckbox1">Monday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option1"
+                  checked>
+                <label class="form-check-label" for="inlineCheckbox1">Tuesday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option1"
+                  checked>
+                <label class="form-check-label" for="inlineCheckbox1">Wednesday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option1"
+                  checked>
+                <label class="form-check-label" for="inlineCheckbox1">Thursday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option1"
+                  checked>
+                <label class="form-check-label" for="inlineCheckbox1">Friday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox6"
+                  value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Saturday</label></th>
+              <th><input class="form-check-input" type="checkbox" id="inlineCheckbox7"
+                  value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Sunday</label></th>
+            </tr>
+          </thead>
+          <tr style="text-align:center;">
+            <td>Start Time:</td>
+            <td><input name="ST1" id="ST1" class="form-control example" type="time" value="08:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ST2" id="ST2" class="form-control example" type="time" value="08:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ST3" id="ST3" class="form-control example" type="time" value="08:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ST4" id="ST4" class="form-control example" type="time" value="08:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ST5" id="ST5" class="form-control example" type="time" value="08:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input id="ST6" class="form-control example" type="time"
+                style="width:100px; align-content:center; margin-right:-50px" disabled></td>
+            <td><input id="ST7" class="form-control example" type="time"
+                style="width:100px; align-content:center; margin-right:-50px" disabled></td>
+          </tr>
+          <tr style="text-align:center;">
+            <td>End Time:</td>
+            <td><input name="ET1" id="ET1" class="form-control example" type="time" value="17:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ET2" id="ET2" class="form-control example" type="time" value="17:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ET3" id="ET3" class="form-control example" type="time" value="17:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ET4" id="ET4" class="form-control example" type="time" value="17:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input name="ET5" id="ET5" class="form-control example" type="time" value="17:30"
+                style="width:100px; align-content:center; margin-right:-50px"></td>
+            <td><input id="ET6" class="form-control example" type="time"
+                style="width:100px; align-content:center; margin-right:-50px" disabled></td>
+            <td><input id="ET7" class="form-control example" type="time"
+                style="width:100px; align-content:center; margin-right:-50px" disabled></td>
+          </tr>
+        </table>
+
+        <div class="input-group" style="width:60%; margin-bottom:20px; margin-left:21%">
+          <input type="date" name="date" class="form-control" placeholder="Date">
+          <input type="text" name="holiday" class="form-control" placeholder="Holiday Name">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Add</button>
+          </div>
+        </div>
+
+        <div class="row"
+          style="text-align:center; width:15cm; margin-left:25%; border: 1px solid lightgray; margin-bottom:5%">
+
+          <table class="table table-hover ">
+            <thead class="thead-light">
+              <tr>
+                <th>Date</th>
+                <th>Holiday</th>
+                <th></th>
+              </tr>
+              <tr>
+                <td>31/08/2020</td>
+                <td>National Day</td>
+                <td><a href="#"><i class="fa fa-trash"></a></td>
+              </tr>
+              <tr>
+                <td>16/09/2020</td>
+                <td>Malaysia Day</td>
+                <td><a href="#"><i class="fa fa-trash"></a></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </thead>
+          </table>
+
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-secondary">Save Holiday</button>
+        </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  document.getElementById('inlineCheckbox1').onchange = function() {
+      document.getElementById('ST1').disabled = !this.checked;
+      document.getElementById('ET1').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox2').onchange = function() {
+      document.getElementById('ST2').disabled = !this.checked;
+      document.getElementById('ET2').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox3').onchange = function() {
+      document.getElementById('ST3').disabled = !this.checked;
+      document.getElementById('ET3').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox4').onchange = function() {
+      document.getElementById('ST4').disabled = !this.checked;
+      document.getElementById('ET4').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox5').onchange = function() {
+      document.getElementById('ST5').disabled = !this.checked;
+      document.getElementById('ET5').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox6').onchange = function() {
+      document.getElementById('ST6').disabled = !this.checked;
+      document.getElementById('ET6').disabled = !this.checked;
+  };
+
+  document.getElementById('inlineCheckbox7').onchange = function() {
+      document.getElementById('ST7').disabled = !this.checked;
+      document.getElementById('ET7').disabled = !this.checked;
+  };
+</script>
